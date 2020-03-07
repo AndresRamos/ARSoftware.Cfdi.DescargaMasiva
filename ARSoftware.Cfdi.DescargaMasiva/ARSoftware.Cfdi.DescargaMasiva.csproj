@@ -8,6 +8,9 @@
     <Description>Clases y servicios para descargar los CFDI de forma masiva utilizando el web service del SAT.</Description>
     <PackageTags>SAT CFDI Descarga Masiva Web Service</PackageTags>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/AndresRamos/ARSoftware.Cfdi.DescargaMasiva</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/AndresRamos/ARSoftware.Cfdi.DescargaMasiva</RepositoryUrl>
   </PropertyGroup>
 
   <ItemGroup>
