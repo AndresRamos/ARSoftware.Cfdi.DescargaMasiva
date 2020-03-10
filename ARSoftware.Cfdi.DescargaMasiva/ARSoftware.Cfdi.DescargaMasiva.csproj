@@ -4,13 +4,14 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <RunAnalyzersDuringBuild>false</RunAnalyzersDuringBuild>
     <Authors>AR Software</Authors>
-    <Product>AR Software</Product>
+    <Product>ARSoftware Cfdi Descarga Masiva</Product>
     <Description>Clases y servicios para descargar los CFDI de forma masiva utilizando el web service del SAT.</Description>
     <PackageTags>SAT CFDI Descarga Masiva Web Service</PackageTags>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/AndresRamos/ARSoftware.Cfdi.DescargaMasiva</PackageProjectUrl>
     <RepositoryUrl>https://github.com/AndresRamos/ARSoftware.Cfdi.DescargaMasiva</RepositoryUrl>
+    <Version>1.0.1</Version>
   </PropertyGroup>
 
   <ItemGroup>

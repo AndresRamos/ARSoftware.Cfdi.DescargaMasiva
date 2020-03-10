@@ -1,4 +1,4 @@
-﻿namespace ARSoftware.Cfdi.DescargaMasiva.Models
+﻿namespace ARSoftware.Cfdi.DescargaMasiva.Enumerations
 {
     public class TipoSolicitud : Enumeration
     {

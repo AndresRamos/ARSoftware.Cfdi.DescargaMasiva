@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
-namespace ARSoftware.Cfdi.DescargaMasiva.Models
+namespace ARSoftware.Cfdi.DescargaMasiva.Enumerations
 {
     public abstract class Enumeration : IComparable
     {

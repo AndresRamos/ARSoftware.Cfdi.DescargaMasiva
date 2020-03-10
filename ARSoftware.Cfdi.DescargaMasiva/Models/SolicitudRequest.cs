@@ -1,4 +1,5 @@
 ﻿using System;
+using ARSoftware.Cfdi.DescargaMasiva.Enumerations;
 
 namespace ARSoftware.Cfdi.DescargaMasiva.Models
 {
