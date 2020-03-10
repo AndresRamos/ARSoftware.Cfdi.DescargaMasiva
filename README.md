@@ -2,7 +2,10 @@
 Clases y servicios para descargar los CFDI de forma masiva utilizando el web service del SAT.
 
 Esta libreria permite hacer uso del web service proporcionado por el SAT para descargar los CFDI de forma masiva.
+
 Esta libreria esta desarrollada en .Net Standard 2.0 lo que la hace compatible para implementarse en desarrollos en .Net Framework y .Net Core.
+
+Nuget: ```Install-Package ARSoftware.Cfdi.DescargaMasiva```
 
 ## Ejemplo
 ```csharp
@@ -64,6 +67,7 @@ public static void Main(string[] args)
 }
 
 ```
+
 ## Que Sigue?
 - [x] Publicar prjecto
 - [x] Publicar en Nuget
@@ -72,7 +76,7 @@ public static void Main(string[] args)
 - [ ] Cambiar el envio de soap a utilizar de HTTP Web Request a HTTP Client
 - [ ] Mejorar la lectura del web response para capturar errores
 
-Nuget: ```Install-Package ARSoftware.Cfdi.DescargaMasiva```
+Mi aplicacion https://www.arsoft.net/manejador-documentos-cfdi hace uso de esta libreria para la descarga de documentos.
 
 Email: andres@arsoft.net
 
