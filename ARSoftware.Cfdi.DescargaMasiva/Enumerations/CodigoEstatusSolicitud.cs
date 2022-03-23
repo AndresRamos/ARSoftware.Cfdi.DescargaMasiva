@@ -41,9 +41,29 @@
         public static readonly CodigoEstatusSolicitud _5000 = new CodigoEstatusSolicitud(5000, "5000", "Solicitud de descarga recibida con éxito", "");
 
         /// <summary>
+        ///     Tercero no autorizado
+        /// </summary>
+        public static readonly CodigoEstatusSolicitud _5001 = new CodigoEstatusSolicitud(5001, "5001", "El solicitante no tiene autorización de descarga de xml de los contribuyentes", "");
+
+        /// <summary>
+        ///     Se han agotado las solicitudes de por vida
+        /// </summary>
+        public static readonly CodigoEstatusSolicitud _5002 = new CodigoEstatusSolicitud(5002, "5002", "Se ha alcanzado el límite de solicitudes, con el mismo criterio", "");
+
+        /// <summary>
         ///     No se encontró la información
         /// </summary>
         public static readonly CodigoEstatusSolicitud _5004 = new CodigoEstatusSolicitud(5004, "5004", "No se encontró la información", "No se encontró la información del paquete solicitado");
+
+        /// <summary>
+        ///     Ya se tiene una solicitud registrada 
+        /// </summary>
+        public static readonly CodigoEstatusSolicitud _5005 = new CodigoEstatusSolicitud(5005, "5005", "Ya se tiene una solicitud registrada", "Ya existe una solicitud activa con los mismos criterios");
+
+        /// <summary>
+        ///     Error interno en el proceso
+        /// </summary>
+        public static readonly CodigoEstatusSolicitud _5006 = new CodigoEstatusSolicitud(5006, "5006", "Error interno en el proceso", "");
 
         /// <summary>
         ///     No existe el paquete solicitado

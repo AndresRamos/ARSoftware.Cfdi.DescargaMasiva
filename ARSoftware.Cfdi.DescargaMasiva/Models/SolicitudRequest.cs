@@ -13,10 +13,10 @@ namespace ARSoftware.Cfdi.DescargaMasiva.Models
         public DateTime EndDate { get; private set; }
         public TipoSolicitud RequestType { get; private set; }
         public string SenderRfc { get; private set; }
-        public string RecipientRfc { get; private set; }
+        public string[] RecipientRfc { get; private set; }
         public string RequestingRfc { get; private set; }
 
-        public static SolicitudRequest CreateInstance(DateTime startDate, DateTime endDete, TipoSolicitud requestType, string senderRfc, string recipientRfc, string requestingRfc)
+        public static SolicitudRequest CreateInstance(DateTime startDate, DateTime endDete, TipoSolicitud requestType, string senderRfc, string[] recipientRfc, string requestingRfc)
         {
             return new SolicitudRequest
             {
