@@ -1,50 +1,18 @@
-﻿namespace ARSoftware.Cfdi.DescargaMasiva.Enumerations
+﻿using Ardalis.SmartEnum;
+
+namespace ARSoftware.Cfdi.DescargaMasiva.Enumerations
 {
-    public class EstadoSolicitud : Enumeration
+    public sealed class EstadoSolicitud : SmartEnum<EstadoSolicitud>
     {
-        public static readonly EstadoSolicitud Aceptada = new EstadoSolicitud(1, "Aceptada");
-        public static readonly EstadoSolicitud EnProceso = new EstadoSolicitud(2, "EnProceso");
-        public static readonly EstadoSolicitud Terminada = new EstadoSolicitud(3, "Terminada");
-        public static readonly EstadoSolicitud Error = new EstadoSolicitud(4, "Error");
-        public static readonly EstadoSolicitud Rechazada = new EstadoSolicitud(5, "Rechazada");
-        public static readonly EstadoSolicitud Vencida = new EstadoSolicitud(6, "Vencida");
+        public static readonly EstadoSolicitud Aceptada = new EstadoSolicitud("Aceptada", 1);
+        public static readonly EstadoSolicitud EnProceso = new EstadoSolicitud("EnProceso", 2);
+        public static readonly EstadoSolicitud Terminada = new EstadoSolicitud("Terminada", 3);
+        public static readonly EstadoSolicitud Error = new EstadoSolicitud("Error", 4);
+        public static readonly EstadoSolicitud Rechazada = new EstadoSolicitud("Rechazada", 5);
+        public static readonly EstadoSolicitud Vencida = new EstadoSolicitud("Vencida", 6);
 
-        public EstadoSolicitud(int id, string name) : base(id, name)
+        private EstadoSolicitud(string name, int value) : base(name, value)
         {
-        }
-
-        public static bool TryParse(string estadoSolicitud, out EstadoSolicitud result)
-        {
-            if (estadoSolicitud == null)
-            {
-                result = new EstadoSolicitud(0, "Estado Invalido");
-                return false;
-            }
-
-            switch (estadoSolicitud)
-            {
-                case "1":
-                    result = Aceptada;
-                    return true;
-                case "2":
-                    result = EnProceso;
-                    return true;
-                case "3":
-                    result = Terminada;
-                    return true;
-                case "4":
-                    result = Error;
-                    return true;
-                case "5":
-                    result = Rechazada;
-                    return true;
-                case "6":
-                    result = Vencida;
-                    return true;
-                default:
-                    result = new EstadoSolicitud(0, "Estado Invalido");
-                    return false;
-            }
         }
     }
 }

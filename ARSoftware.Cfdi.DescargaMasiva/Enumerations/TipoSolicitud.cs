@@ -1,11 +1,13 @@
-﻿namespace ARSoftware.Cfdi.DescargaMasiva.Enumerations
-{
-    public class TipoSolicitud : Enumeration
-    {
-        public static readonly TipoSolicitud Cfdi = new TipoSolicitud(0, "CFDI");
-        public static readonly TipoSolicitud Metadata = new TipoSolicitud(1, "Metadata");
+﻿using Ardalis.SmartEnum;
 
-        public TipoSolicitud(int id, string name) : base(id, name)
+namespace ARSoftware.Cfdi.DescargaMasiva.Enumerations
+{
+    public sealed class TipoSolicitud : SmartEnum<TipoSolicitud>
+    {
+        public static readonly TipoSolicitud Cfdi = new TipoSolicitud("CFDI", 0);
+        public static readonly TipoSolicitud Metadata = new TipoSolicitud("Metadata", 1);
+
+        private TipoSolicitud(string name, int value) : base(name, value)
         {
         }
     }
