@@ -41,10 +41,17 @@ namespace ARSoftware.Cfdi.DescargaMasiva.Services
             solicitudElement.SetAttribute("FechaInicial", solicitudRequest.StartDate.ToSoapStartDateString());
             solicitudElement.SetAttribute("FechaFinal", solicitudRequest.EndDate.ToSoapEndDateString());
             solicitudElement.SetAttribute("RfcEmisor", solicitudRequest.SenderRfc);
-            solicitudElement.SetAttribute("RfcReceptor", solicitudRequest.RecipientRfc);
             solicitudElement.SetAttribute("RfcSolicitante", solicitudRequest.RequestingRfc);
             solicitudElement.SetAttribute("TipoSolicitud", solicitudRequest.RequestType.Name);
 
+            var rfcReceptores = xmlDocument.CreateElement(CfdiDescargaMasivaNamespaces.DesPrefix, "RfcReceptores", CfdiDescargaMasivaNamespaces.DesNamespaceUrl);
+            foreach (var item in solicitudRequest.RecipientRfc)
+            {
+                var rfcReceptorElement = xmlDocument.CreateElement(CfdiDescargaMasivaNamespaces.DesPrefix, "RfcReceptor", CfdiDescargaMasivaNamespaces.DesNamespaceUrl);
+                rfcReceptorElement.InnerText = item;
+                rfcReceptores.AppendChild(rfcReceptorElement);
+            }
+            solicitudElement.AppendChild(rfcReceptores);
             var signatureElement = SignedXmlHelper.SignRequest(solicitudElement, certificate);
             solicitudElement.AppendChild(signatureElement);
             solicitaDescargaElement.AppendChild(solicitudElement);

@@ -18,7 +18,7 @@ public static void Main(string[] args)
     var fechaFin = DateTime.Today;
     var tipoSolicitud = TipoSolicitud.Cfdi;
     var rfcEmisor = "";
-    var rfcReceptor = "";
+    var rfcReceptor = new string[] { "" };
     var rfcSolicitante = "";
 
     var certificadoSat = X509Certificate2Helper.GetCertificate(certificadoPfx, certificadoPassword);
