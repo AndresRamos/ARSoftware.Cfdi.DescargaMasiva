@@ -1,21 +1,52 @@
 ﻿using System;
 using System.Security.Cryptography.X509Certificates;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Xml;
 using ARSoftware.Cfdi.DescargaMasiva.Constants;
 using ARSoftware.Cfdi.DescargaMasiva.Helpers;
+using ARSoftware.Cfdi.DescargaMasiva.Interfaces;
 using ARSoftware.Cfdi.DescargaMasiva.Models;
 
 namespace ARSoftware.Cfdi.DescargaMasiva.Services
 {
-    public class SolicitudService
+    public class SolicitudService : ISolicitudService
     {
-        public readonly string SoapActionUrl;
-        public readonly string Url;
+        private readonly IHttpSoapClient _httpSoapClient;
 
-        public SolicitudService(string url, string action)
+        public SolicitudService(IHttpSoapClient httpSoapClient)
         {
-            Url = url;
-            SoapActionUrl = action;
+            _httpSoapClient = httpSoapClient;
+        }
+
+        public SolicitudResult GetSoapResponseResult(SoapRequestResult soapRequestResult)
+        {
+            var xmlDocument = new XmlDocument();
+            xmlDocument.LoadXml(soapRequestResult.ResponseContent);
+
+            XmlNode element = xmlDocument.GetElementsByTagName("SolicitaDescargaResult")[0];
+            if (element != null)
+            {
+                string codEstatus = element.Attributes.GetNamedItem("CodEstatus")?.Value;
+                string mensaje = element.Attributes.GetNamedItem("Mensaje")?.Value;
+                string idSolicitud = element.Attributes.GetNamedItem("IdSolicitud")?.Value;
+                return SolicitudResult.CreateInstance(codEstatus, idSolicitud, mensaje, soapRequestResult.ResponseContent);
+            }
+
+            throw new ArgumentException("El resultado no estan en un formato valido.", nameof(soapRequestResult.ResponseContent));
+        }
+
+        public async Task<SolicitudResult> SendSoapRequest(string soapRequestContent,
+                                                           string authorizationHttpRequestHeader,
+                                                           CancellationToken cancellationToken)
+        {
+            SoapRequestResult soapRequestResult = await _httpSoapClient.SendRequestAsync(CfdiDescargaMasivaWebServiceUrls.SolicitudUrl,
+                CfdiDescargaMasivaWebServiceUrls.SolicitudSoapActionUrl,
+                soapRequestContent,
+                authorizationHttpRequestHeader,
+                cancellationToken);
+
+            return GetSoapResponseResult(soapRequestResult);
         }
 
         public static string GenerateSoapRequestEnvelopeXmlContent(SolicitudRequest solicitudRequest, X509Certificate2 certificate)
@@ -97,31 +128,6 @@ namespace ARSoftware.Cfdi.DescargaMasiva.Services
             solicitaDescargaElement.AppendChild(solicitudElement);
 
             return xmlDocument.OuterXml;
-        }
-
-        public SolicitudResult GetSoapResponseResult(SoapRequestResult soapRequestResult)
-        {
-            var xmlDocument = new XmlDocument();
-            xmlDocument.LoadXml(soapRequestResult.WebResponse);
-
-            XmlNode element = xmlDocument.GetElementsByTagName("SolicitaDescargaResult")[0];
-            if (element != null)
-            {
-                string codEstatus = element.Attributes.GetNamedItem("CodEstatus")?.Value;
-                string mensaje = element.Attributes.GetNamedItem("Mensaje")?.Value;
-                string idSolicitud = element.Attributes.GetNamedItem("IdSolicitud")?.Value;
-                return SolicitudResult.CreateInstance(codEstatus, idSolicitud, mensaje, soapRequestResult.WebResponse);
-            }
-
-            throw new ArgumentException("El resultado no estan en un formato valido.", nameof(soapRequestResult.WebResponse));
-        }
-
-        public SolicitudResult SendSoapRequest(string soapRequestContent, string authorizationHttpRequestHeader)
-        {
-            var httpWebRequestSoapService = new HttpWebRequestSoapService(Url, SoapActionUrl);
-            SoapRequestResult soapRequestResult =
-                httpWebRequestSoapService.SendSoapRequest(soapRequestContent, authorizationHttpRequestHeader);
-            return GetSoapResponseResult(soapRequestResult);
         }
     }
 }

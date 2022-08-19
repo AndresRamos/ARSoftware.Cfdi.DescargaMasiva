@@ -9,15 +9,11 @@ namespace ARSoftware.Cfdi.DescargaMasiva.Models
         }
 
         public HttpStatusCode HttpStatusCode { get; private set; }
-        public string WebResponse { get; private set; }
+        public string ResponseContent { get; private set; }
 
-        public static SoapRequestResult CreateInstance(HttpStatusCode httpStatusCode, string webResponse)
+        public static SoapRequestResult CreateInstance(HttpStatusCode httpStatusCode, string responseContent)
         {
-            return new SoapRequestResult
-            {
-                HttpStatusCode = httpStatusCode,
-                WebResponse = webResponse
-            };
+            return new SoapRequestResult { HttpStatusCode = httpStatusCode, ResponseContent = responseContent };
         }
     }
 }

@@ -1,11 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.29806.167
+# Visual Studio Version 17
+VisualStudioVersion = 17.3.32811.315
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Src", "Src", "{BB648DB0-5A41-4046-AC0A-2AC6969F1022}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ARSoftware.Cfdi.DescargaMasiva", "ARSoftware.Cfdi.DescargaMasiva\ARSoftware.Cfdi.DescargaMasiva.csproj", "{B1E690F4-441B-452F-8E2B-DB8A56D0DD93}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ARSoftware.Cfdi.DescargaMasiva", "ARSoftware.Cfdi.DescargaMasiva\ARSoftware.Cfdi.DescargaMasiva.csproj", "{B1E690F4-441B-452F-8E2B-DB8A56D0DD93}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -20,9 +18,6 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(NestedProjects) = preSolution
-		{B1E690F4-441B-452F-8E2B-DB8A56D0DD93} = {BB648DB0-5A41-4046-AC0A-2AC6969F1022}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {59C7ECE6-AC78-419D-BD51-D8589D453504}
