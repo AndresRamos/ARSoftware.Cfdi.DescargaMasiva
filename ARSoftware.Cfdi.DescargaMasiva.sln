@@ -5,6 +5,8 @@ VisualStudioVersion = 17.3.32811.315
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ARSoftware.Cfdi.DescargaMasiva", "ARSoftware.Cfdi.DescargaMasiva\ARSoftware.Cfdi.DescargaMasiva.csproj", "{B1E690F4-441B-452F-8E2B-DB8A56D0DD93}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleDemo", "sample\ConsoleDemo\ConsoleDemo.csproj", "{4815402F-BDFD-4C2F-BA81-51C63FD9308D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{B1E690F4-441B-452F-8E2B-DB8A56D0DD93}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B1E690F4-441B-452F-8E2B-DB8A56D0DD93}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B1E690F4-441B-452F-8E2B-DB8A56D0DD93}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4815402F-BDFD-4C2F-BA81-51C63FD9308D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4815402F-BDFD-4C2F-BA81-51C63FD9308D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4815402F-BDFD-4C2F-BA81-51C63FD9308D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4815402F-BDFD-4C2F-BA81-51C63FD9308D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

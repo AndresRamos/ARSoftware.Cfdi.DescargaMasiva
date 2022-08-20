@@ -36,9 +36,9 @@ namespace ARSoftware.Cfdi.DescargaMasiva.Services
             throw new ArgumentException("El resultado no estan en un formato valido.", nameof(soapRequestResult.ResponseContent));
         }
 
-        public async Task<SolicitudResult> SendSoapRequest(string soapRequestContent,
-                                                           string authorizationHttpRequestHeader,
-                                                           CancellationToken cancellationToken)
+        public async Task<SolicitudResult> SendSoapRequestAsync(string soapRequestContent,
+                                                                string authorizationHttpRequestHeader,
+                                                                CancellationToken cancellationToken)
         {
             SoapRequestResult soapRequestResult = await _httpSoapClient.SendRequestAsync(CfdiDescargaMasivaWebServiceUrls.SolicitudUrl,
                 CfdiDescargaMasivaWebServiceUrls.SolicitudSoapActionUrl,

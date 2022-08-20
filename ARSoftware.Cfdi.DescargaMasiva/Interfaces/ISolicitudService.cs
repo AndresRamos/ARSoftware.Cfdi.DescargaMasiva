@@ -8,8 +8,8 @@ namespace ARSoftware.Cfdi.DescargaMasiva.Interfaces
     {
         SolicitudResult GetSoapResponseResult(SoapRequestResult soapRequestResult);
 
-        Task<SolicitudResult> SendSoapRequest(string soapRequestContent,
-                                              string authorizationHttpRequestHeader,
-                                              CancellationToken cancellationToken);
+        Task<SolicitudResult> SendSoapRequestAsync(string soapRequestContent,
+                                                   string authorizationHttpRequestHeader,
+                                                   CancellationToken cancellationToken);
     }
 }
