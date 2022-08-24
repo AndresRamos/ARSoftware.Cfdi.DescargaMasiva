@@ -119,9 +119,14 @@ namespace ARSoftware.Cfdi.DescargaMasiva.Services
             xmlDocument.LoadXml(soapRequestResult.ResponseContent);
 
             XmlNode element = xmlDocument.GetElementsByTagName("SolicitaDescargaResult")[0];
-            if (element == null)
+            if (element is null)
             {
                 throw new ArgumentException("El resultado no estan en un formato valido.", nameof(soapRequestResult.ResponseContent));
+            }
+
+            if (element.Attributes is null)
+            {
+                throw new ArgumentException("El nodo no tiene atributos.", nameof(soapRequestResult.ResponseContent));
             }
 
             string codEstatus = element.Attributes.GetNamedItem("CodEstatus")?.Value;

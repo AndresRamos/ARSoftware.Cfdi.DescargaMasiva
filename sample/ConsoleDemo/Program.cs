@@ -1,5 +1,4 @@
 using System.Security.Cryptography.X509Certificates;
-using System.Web;
 using ARSoftware.Cfdi.DescargaMasiva;
 using ARSoftware.Cfdi.DescargaMasiva.Enumerations;
 using ARSoftware.Cfdi.DescargaMasiva.Helpers;
@@ -37,7 +36,7 @@ public class Program
         string? soapRequestEnvelopeXml = autenticacionService.GenerateSoapRequestEnvelopeXmlContent(autenticacionRequest, certificadoSat);
         AutenticacionResult? autenticacionResult =
             await autenticacionService.SendSoapRequestAsync(soapRequestEnvelopeXml, cancellationToken);
-        var authorizationHttpRequestHeader = $@"WRAP access_token=""{HttpUtility.UrlDecode(autenticacionResult.Token)}""";
+        string? authorizationHttpRequestHeader = SoapRequestHelper.CreateAutorizationHttpHeaderStringFromToken(autenticacionResult.Token);
 
         // Solicitud
         var solicitudService = host.Services.GetRequiredService<ISolicitudService>();

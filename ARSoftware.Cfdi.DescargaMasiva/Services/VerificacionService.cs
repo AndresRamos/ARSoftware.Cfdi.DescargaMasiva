@@ -84,6 +84,16 @@ namespace ARSoftware.Cfdi.DescargaMasiva.Services
             }
 
             XmlNode verificaSolicitudDescargaResultElement = xmlDocument.GetElementsByTagName("VerificaSolicitudDescargaResult")[0];
+            if (verificaSolicitudDescargaResultElement is null)
+            {
+                throw new ArgumentException("El resultado no estan en un formato valido.", nameof(soapRequestResult.ResponseContent));
+            }
+
+            if (verificaSolicitudDescargaResultElement.Attributes is null)
+            {
+                throw new ArgumentException("El nodo no tiene atributos.", nameof(soapRequestResult.ResponseContent));
+            }
+
             string codigoEstadoSolicitud = verificaSolicitudDescargaResultElement.Attributes.GetNamedItem("CodigoEstadoSolicitud")?.Value;
             string estadoSolicitud = verificaSolicitudDescargaResultElement.Attributes.GetNamedItem("EstadoSolicitud")?.Value;
             string codEstatus = verificaSolicitudDescargaResultElement.Attributes.GetNamedItem("CodEstatus")?.Value;

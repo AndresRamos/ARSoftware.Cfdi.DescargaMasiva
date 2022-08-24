@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Web;
 
 namespace ARSoftware.Cfdi.DescargaMasiva.Helpers
 {
@@ -24,6 +25,11 @@ namespace ARSoftware.Cfdi.DescargaMasiva.Helpers
         public static string ToSoapEndDateString(this DateTime date)
         {
             return date.ToString("yyyy-MM-dd") + "T23:59:59";
+        }
+
+        public static string CreateAutorizationHttpHeaderStringFromToken(string token)
+        {
+            return $@"WRAP access_token=""{HttpUtility.UrlDecode(token)}""";
         }
     }
 }

@@ -2,19 +2,19 @@
 
 	<PropertyGroup>
 		<TargetFramework>netstandard2.0</TargetFramework>
-		<RunAnalyzersDuringBuild>false</RunAnalyzersDuringBuild>
+		<RunAnalyzersDuringBuild>False</RunAnalyzersDuringBuild>
+		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+		<Version>2.0.0-beta</Version>
 		<Authors>AR Software</Authors>
 		<Product>ARSoftware Cfdi Descarga Masiva</Product>
 		<Description>Clases y servicios para descargar los CFDI de forma masiva utilizando el web service del SAT.</Description>
-		<PackageTags>SAT CFDI Descarga Masiva Web Service</PackageTags>
-		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<Copyright>Copyright © AR Software 2022</Copyright>
 		<PackageProjectUrl>https://github.com/AndresRamos/ARSoftware.Cfdi.DescargaMasiva</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/AndresRamos/ARSoftware.Cfdi.DescargaMasiva</RepositoryUrl>
-		<Version>2.0.0-alpha</Version>
-		<PackageReleaseNotes>Se actualizo el cliente para usar el HttpClient en lugar de WebRequest.</PackageReleaseNotes>
-		<Copyright>Copyright © AR Software 2022</Copyright>
 		<RepositoryType>git</RepositoryType>
+		<PackageTags>SAT CFDI Descarga Masiva Web Service</PackageTags>
+		<PackageReleaseNotes>Se actualizo el cliente para implementar HttpClient en lugar de WebRequest y se implementaron nuevos cambios del web service.</PackageReleaseNotes>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 	</PropertyGroup>
 
 	<ItemGroup>
