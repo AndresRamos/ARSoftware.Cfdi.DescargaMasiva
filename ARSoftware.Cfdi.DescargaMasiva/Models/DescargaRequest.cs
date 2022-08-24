@@ -11,11 +11,7 @@
 
         public static DescargaRequest CreateInstace(string packageId, string requestingRfc)
         {
-            return new DescargaRequest
-            {
-                PackageId = packageId,
-                RequestingRfc = requestingRfc
-            };
+            return new DescargaRequest { PackageId = packageId, RequestingRfc = requestingRfc };
         }
     }
 }

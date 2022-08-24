@@ -1,26 +1,26 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
-    <RunAnalyzersDuringBuild>false</RunAnalyzersDuringBuild>
-    <Authors>AR Software</Authors>
-    <Product>ARSoftware Cfdi Descarga Masiva</Product>
-    <Description>Clases y servicios para descargar los CFDI de forma masiva utilizando el web service del SAT.</Description>
-    <PackageTags>SAT CFDI Descarga Masiva Web Service</PackageTags>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <PackageProjectUrl>https://github.com/AndresRamos/ARSoftware.Cfdi.DescargaMasiva</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/AndresRamos/ARSoftware.Cfdi.DescargaMasiva</RepositoryUrl>
-    <Version>2.0.0-alpha</Version>
-    <PackageReleaseNotes>Se actualizo el cliente para usar el HttpClient en lugar de WebRequest.</PackageReleaseNotes>
-    <Copyright>Copyright © AR Software 2022</Copyright>
-    <RepositoryType>git</RepositoryType>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>netstandard2.0</TargetFramework>
+		<RunAnalyzersDuringBuild>false</RunAnalyzersDuringBuild>
+		<Authors>AR Software</Authors>
+		<Product>ARSoftware Cfdi Descarga Masiva</Product>
+		<Description>Clases y servicios para descargar los CFDI de forma masiva utilizando el web service del SAT.</Description>
+		<PackageTags>SAT CFDI Descarga Masiva Web Service</PackageTags>
+		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<PackageProjectUrl>https://github.com/AndresRamos/ARSoftware.Cfdi.DescargaMasiva</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/AndresRamos/ARSoftware.Cfdi.DescargaMasiva</RepositoryUrl>
+		<Version>2.0.0-alpha</Version>
+		<PackageReleaseNotes>Se actualizo el cliente para usar el HttpClient en lugar de WebRequest.</PackageReleaseNotes>
+		<Copyright>Copyright © AR Software 2022</Copyright>
+		<RepositoryType>git</RepositoryType>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Ardalis.SmartEnum" Version="2.1.0" />
-    <PackageReference Include="Microsoft.Extensions.Http" Version="6.0.0" />
-    <PackageReference Include="System.Security.Cryptography.Xml" Version="6.0.1" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Ardalis.SmartEnum" Version="2.1.0" />
+		<PackageReference Include="Microsoft.Extensions.Http" Version="6.0.0" />
+		<PackageReference Include="System.Security.Cryptography.Xml" Version="6.0.1" />
+	</ItemGroup>
 
 </Project>

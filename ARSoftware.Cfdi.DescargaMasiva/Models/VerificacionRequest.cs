@@ -11,11 +11,7 @@
 
         public static VerificacionRequest CreateInstance(string requestId, string requestingRfc)
         {
-            return new VerificacionRequest
-            {
-                RequestId = requestId,
-                RequestingRfc = requestingRfc
-            };
+            return new VerificacionRequest { RequestId = requestId, RequestingRfc = requestingRfc };
         }
     }
 }

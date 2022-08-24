@@ -19,37 +19,7 @@ namespace ARSoftware.Cfdi.DescargaMasiva.Services
             _httpSoapClient = httpSoapClient;
         }
 
-        public SolicitudResult GetSoapResponseResult(SoapRequestResult soapRequestResult)
-        {
-            var xmlDocument = new XmlDocument();
-            xmlDocument.LoadXml(soapRequestResult.ResponseContent);
-
-            XmlNode element = xmlDocument.GetElementsByTagName("SolicitaDescargaResult")[0];
-            if (element != null)
-            {
-                string codEstatus = element.Attributes.GetNamedItem("CodEstatus")?.Value;
-                string mensaje = element.Attributes.GetNamedItem("Mensaje")?.Value;
-                string idSolicitud = element.Attributes.GetNamedItem("IdSolicitud")?.Value;
-                return SolicitudResult.CreateInstance(codEstatus, idSolicitud, mensaje, soapRequestResult.ResponseContent);
-            }
-
-            throw new ArgumentException("El resultado no estan en un formato valido.", nameof(soapRequestResult.ResponseContent));
-        }
-
-        public async Task<SolicitudResult> SendSoapRequestAsync(string soapRequestContent,
-                                                                string authorizationHttpRequestHeader,
-                                                                CancellationToken cancellationToken)
-        {
-            SoapRequestResult soapRequestResult = await _httpSoapClient.SendRequestAsync(CfdiDescargaMasivaWebServiceUrls.SolicitudUrl,
-                CfdiDescargaMasivaWebServiceUrls.SolicitudSoapActionUrl,
-                soapRequestContent,
-                authorizationHttpRequestHeader,
-                cancellationToken);
-
-            return GetSoapResponseResult(soapRequestResult);
-        }
-
-        public static string GenerateSoapRequestEnvelopeXmlContent(SolicitudRequest solicitudRequest, X509Certificate2 certificate)
+        public string GenerateSoapRequestEnvelopeXmlContent(SolicitudRequest solicitudRequest, X509Certificate2 certificate)
         {
             var xmlDocument = new XmlDocument();
 
@@ -128,6 +98,36 @@ namespace ARSoftware.Cfdi.DescargaMasiva.Services
             solicitaDescargaElement.AppendChild(solicitudElement);
 
             return xmlDocument.OuterXml;
+        }
+
+        public async Task<SolicitudResult> SendSoapRequestAsync(string soapRequestContent,
+                                                                string authorizationHttpRequestHeader,
+                                                                CancellationToken cancellationToken)
+        {
+            SoapRequestResult soapRequestResult = await _httpSoapClient.SendRequestAsync(CfdiDescargaMasivaWebServiceUrls.SolicitudUrl,
+                CfdiDescargaMasivaWebServiceUrls.SolicitudSoapActionUrl,
+                soapRequestContent,
+                authorizationHttpRequestHeader,
+                cancellationToken);
+
+            return GetSoapResponseResult(soapRequestResult);
+        }
+
+        public SolicitudResult GetSoapResponseResult(SoapRequestResult soapRequestResult)
+        {
+            var xmlDocument = new XmlDocument();
+            xmlDocument.LoadXml(soapRequestResult.ResponseContent);
+
+            XmlNode element = xmlDocument.GetElementsByTagName("SolicitaDescargaResult")[0];
+            if (element == null)
+            {
+                throw new ArgumentException("El resultado no estan en un formato valido.", nameof(soapRequestResult.ResponseContent));
+            }
+
+            string codEstatus = element.Attributes.GetNamedItem("CodEstatus")?.Value;
+            string mensaje = element.Attributes.GetNamedItem("Mensaje")?.Value;
+            string idSolicitud = element.Attributes.GetNamedItem("IdSolicitud")?.Value;
+            return SolicitudResult.CreateInstance(codEstatus, idSolicitud, mensaje, soapRequestResult.ResponseContent);
         }
     }
 }

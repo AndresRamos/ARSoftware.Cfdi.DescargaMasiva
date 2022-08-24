@@ -60,45 +60,6 @@ namespace ARSoftware.Cfdi.DescargaMasiva.Services
             return xmlDocument.OuterXml;
         }
 
-        public VerificacionResult GetSoapResponseResult(SoapRequestResult soapRequestResult)
-        {
-            var xmlDocument = new XmlDocument();
-            xmlDocument.LoadXml(soapRequestResult.ResponseContent);
-
-            if (xmlDocument.GetElementsByTagName("VerificaSolicitudDescargaResult").Count > 0)
-            {
-                XmlNode verificaSolicitudDescargaResultElement = xmlDocument.GetElementsByTagName("VerificaSolicitudDescargaResult")[0];
-                string codigoEstadoSolicitud =
-                    verificaSolicitudDescargaResultElement.Attributes.GetNamedItem("CodigoEstadoSolicitud")?.Value;
-                string estadoSolicitud = verificaSolicitudDescargaResultElement.Attributes.GetNamedItem("EstadoSolicitud")?.Value;
-                string codEstatus = verificaSolicitudDescargaResultElement.Attributes.GetNamedItem("CodEstatus")?.Value;
-                string numeroCfdis = verificaSolicitudDescargaResultElement.Attributes.GetNamedItem("NumeroCFDIs")?.Value;
-                string mensaje = verificaSolicitudDescargaResultElement.Attributes.GetNamedItem("Mensaje")?.Value;
-
-                var idsPaquetesList = new List<string>();
-
-                if (estadoSolicitud == "3")
-                {
-                    XmlNodeList idsPaquetesElements = xmlDocument.GetElementsByTagName("IdsPaquetes");
-
-                    foreach (XmlNode idPaqueteElement in idsPaquetesElements)
-                    {
-                        idsPaquetesList.Add(idPaqueteElement.InnerText);
-                    }
-                }
-
-                return VerificacionResult.CreateInstance(codEstatus,
-                    codigoEstadoSolicitud,
-                    estadoSolicitud,
-                    numeroCfdis,
-                    mensaje,
-                    idsPaquetesList,
-                    soapRequestResult.ResponseContent);
-            }
-
-            throw new ArgumentNullException("El resultado no contiene el nodo VerificaSolicitudDescargaResult");
-        }
-
         public async Task<VerificacionResult> SendSoapRequestAsync(string soapRequestContent,
                                                                    string authorizationHttpRequestHeader,
                                                                    CancellationToken cancellationToken)
@@ -110,6 +71,44 @@ namespace ARSoftware.Cfdi.DescargaMasiva.Services
                 cancellationToken);
 
             return GetSoapResponseResult(soapRequestResult);
+        }
+
+        public VerificacionResult GetSoapResponseResult(SoapRequestResult soapRequestResult)
+        {
+            var xmlDocument = new XmlDocument();
+            xmlDocument.LoadXml(soapRequestResult.ResponseContent);
+
+            if (xmlDocument.GetElementsByTagName("VerificaSolicitudDescargaResult").Count <= 0)
+            {
+                throw new ArgumentException("El resultado no estan en un formato valido.", nameof(soapRequestResult.ResponseContent));
+            }
+
+            XmlNode verificaSolicitudDescargaResultElement = xmlDocument.GetElementsByTagName("VerificaSolicitudDescargaResult")[0];
+            string codigoEstadoSolicitud = verificaSolicitudDescargaResultElement.Attributes.GetNamedItem("CodigoEstadoSolicitud")?.Value;
+            string estadoSolicitud = verificaSolicitudDescargaResultElement.Attributes.GetNamedItem("EstadoSolicitud")?.Value;
+            string codEstatus = verificaSolicitudDescargaResultElement.Attributes.GetNamedItem("CodEstatus")?.Value;
+            string numeroCfdis = verificaSolicitudDescargaResultElement.Attributes.GetNamedItem("NumeroCFDIs")?.Value;
+            string mensaje = verificaSolicitudDescargaResultElement.Attributes.GetNamedItem("Mensaje")?.Value;
+
+            var idsPaquetesList = new List<string>();
+
+            if (estadoSolicitud == "3")
+            {
+                XmlNodeList idsPaquetesElements = xmlDocument.GetElementsByTagName("IdsPaquetes");
+
+                foreach (XmlNode idPaqueteElement in idsPaquetesElements)
+                {
+                    idsPaquetesList.Add(idPaqueteElement.InnerText);
+                }
+            }
+
+            return VerificacionResult.CreateInstance(codEstatus,
+                codigoEstadoSolicitud,
+                estadoSolicitud,
+                numeroCfdis,
+                mensaje,
+                idsPaquetesList,
+                soapRequestResult.ResponseContent);
         }
     }
 }

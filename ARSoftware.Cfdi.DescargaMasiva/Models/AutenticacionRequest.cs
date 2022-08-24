@@ -14,7 +14,7 @@ namespace ARSoftware.Cfdi.DescargaMasiva.Models
 
         public static AutenticacionRequest CreateInstance()
         {
-            var tokenCreationDateUtc = DateTime.UtcNow;
+            DateTime tokenCreationDateUtc = DateTime.UtcNow;
             return new AutenticacionRequest
             {
                 TokenCreatedDateUtc = tokenCreationDateUtc,
@@ -27,9 +27,7 @@ namespace ARSoftware.Cfdi.DescargaMasiva.Models
         {
             return new AutenticacionRequest
             {
-                TokenCreatedDateUtc = tokenCreatedDateUtc,
-                TokenExpiresDateUtc = tokenExpiresDateUtc,
-                Uuid = uuid
+                TokenCreatedDateUtc = tokenCreatedDateUtc, TokenExpiresDateUtc = tokenExpiresDateUtc, Uuid = uuid
             };
         }
     }

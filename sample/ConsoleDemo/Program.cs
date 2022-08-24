@@ -1,10 +1,10 @@
 using System.Security.Cryptography.X509Certificates;
 using System.Web;
+using ARSoftware.Cfdi.DescargaMasiva;
 using ARSoftware.Cfdi.DescargaMasiva.Enumerations;
 using ARSoftware.Cfdi.DescargaMasiva.Helpers;
 using ARSoftware.Cfdi.DescargaMasiva.Interfaces;
 using ARSoftware.Cfdi.DescargaMasiva.Models;
-using ARSoftware.Cfdi.DescargaMasiva.Services;
 
 namespace ConsoleDemo;
 
@@ -16,17 +16,7 @@ public class Program
     {
         CancellationToken cancellationToken = CancellationTokenSource.Token;
 
-        IHost host = Host.CreateDefaultBuilder(args)
-            .ConfigureServices(services =>
-            {
-                services.AddHttpClient();
-                services.AddTransient<IHttpSoapClient, HttpSoapClient>();
-                services.AddTransient<IAutenticacionService, AutenticacionService>();
-                services.AddTransient<ISolicitudService, SolicitudService>();
-                services.AddTransient<IVerificacionService, VerificacionService>();
-                services.AddTransient<IDescargaService, DescargaService>();
-            })
-            .Build();
+        IHost host = Host.CreateDefaultBuilder(args).ConfigureServices(services => { services.AddCfdiDescargaMasivaServices(); }).Build();
 
         await host.StartAsync(cancellationToken);
 
@@ -58,7 +48,7 @@ public class Program
             rfcEmisor,
             rfcReceptores,
             rfcSolicitante);
-        soapRequestEnvelopeXml = SolicitudService.GenerateSoapRequestEnvelopeXmlContent(solicitudRequest, certificadoSat);
+        soapRequestEnvelopeXml = solicitudService.GenerateSoapRequestEnvelopeXmlContent(solicitudRequest, certificadoSat);
         SolicitudResult? solicitudResult =
             await solicitudService.SendSoapRequestAsync(soapRequestEnvelopeXml, authorizationHttpRequestHeader, cancellationToken);
 

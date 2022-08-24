@@ -102,29 +102,6 @@ namespace ARSoftware.Cfdi.DescargaMasiva.Services
             return xmlDocument.OuterXml;
         }
 
-        public AutenticacionResult GetSoapResponseResult(SoapRequestResult soapRequestResult)
-        {
-            var xmlDocument = new XmlDocument();
-            xmlDocument.LoadXml(soapRequestResult.ResponseContent);
-
-            XmlNode AutenticaResultElement = xmlDocument.GetElementsByTagName("AutenticaResult")[0];
-            if (AutenticaResultElement != null)
-            {
-                string token = AutenticaResultElement.InnerXml;
-                return AutenticacionResult.CreateInstance(token, null, null, soapRequestResult.ResponseContent);
-            }
-
-            XmlNode errorElement = xmlDocument.GetElementsByTagName("s:Fault")[0];
-            if (errorElement != null)
-            {
-                string faultCode = xmlDocument.GetElementsByTagName("faultcode")[0].InnerXml;
-                string faultString = xmlDocument.GetElementsByTagName("faultstring")[0].InnerXml;
-                return AutenticacionResult.CreateInstance(null, faultCode, faultString, soapRequestResult.ResponseContent);
-            }
-
-            throw new ArgumentException("Web response is not in a valid format.", nameof(soapRequestResult.ResponseContent));
-        }
-
         public async Task<AutenticacionResult> SendSoapRequestAsync(string soapRequestContent, CancellationToken cancellationToken)
         {
             SoapRequestResult soapRequestResult = await _httpSoapClient.SendRequestAsync(CfdiDescargaMasivaWebServiceUrls.AutenticacionUrl,
@@ -134,6 +111,29 @@ namespace ARSoftware.Cfdi.DescargaMasiva.Services
                 cancellationToken);
 
             return GetSoapResponseResult(soapRequestResult);
+        }
+
+        public AutenticacionResult GetSoapResponseResult(SoapRequestResult soapRequestResult)
+        {
+            var xmlDocument = new XmlDocument();
+            xmlDocument.LoadXml(soapRequestResult.ResponseContent);
+
+            XmlNode autenticaResultElement = xmlDocument.GetElementsByTagName("AutenticaResult")[0];
+            if (autenticaResultElement != null)
+            {
+                string token = autenticaResultElement.InnerXml;
+                return AutenticacionResult.CreateInstance(token, null, null, soapRequestResult.ResponseContent);
+            }
+
+            XmlNode errorElement = xmlDocument.GetElementsByTagName("s:Fault")[0];
+            if (errorElement == null)
+            {
+                throw new ArgumentException("El resultado no estan en un formato valido.", nameof(soapRequestResult.ResponseContent));
+            }
+
+            string faultCode = xmlDocument.GetElementsByTagName("faultcode")[0].InnerXml;
+            string faultString = xmlDocument.GetElementsByTagName("faultstring")[0].InnerXml;
+            return AutenticacionResult.CreateInstance(null, faultCode, faultString, soapRequestResult.ResponseContent);
         }
     }
 }

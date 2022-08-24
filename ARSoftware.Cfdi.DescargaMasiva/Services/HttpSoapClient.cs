@@ -12,11 +12,11 @@ namespace ARSoftware.Cfdi.DescargaMasiva.Services
 {
     public class HttpSoapClient : IHttpSoapClient
     {
-        private readonly IHttpClientFactory _httpClientFactory;
+        private readonly HttpClient _httpClient;
 
-        public HttpSoapClient(IHttpClientFactory httpClientFactory)
+        public HttpSoapClient(HttpClient httpClient)
         {
-            _httpClientFactory = httpClientFactory;
+            _httpClient = httpClient;
         }
 
         public async Task<SoapRequestResult> SendRequestAsync(string url,
@@ -30,8 +30,7 @@ namespace ARSoftware.Cfdi.DescargaMasiva.Services
                 throw new ArgumentNullException(nameof(requestContent), "El xml no puede ser nulo.");
             }
 
-            HttpClient httpClient = _httpClientFactory.CreateClient();
-            httpClient.DefaultRequestHeaders.Clear();
+            _httpClient.DefaultRequestHeaders.Clear();
 
             var request = new HttpRequestMessage(HttpMethod.Post, new Uri(url));
             request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue(MediaTypeNames.Text.Xml));
@@ -40,7 +39,7 @@ namespace ARSoftware.Cfdi.DescargaMasiva.Services
 
             request.Content = new StringContent(requestContent, Encoding.UTF8, MediaTypeNames.Text.Xml);
 
-            HttpResponseMessage response = await httpClient.SendAsync(request, cancellationToken);
+            HttpResponseMessage response = await _httpClient.SendAsync(request, cancellationToken);
 
             return SoapRequestResult.CreateInstance(response.StatusCode, await response.Content.ReadAsStringAsync());
         }

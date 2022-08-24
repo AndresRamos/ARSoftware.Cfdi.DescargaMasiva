@@ -14,9 +14,15 @@ namespace ARSoftware.Cfdi.DescargaMasiva.Models
         public string NumeroCfdis { get; private set; }
         public string Mensaje { get; private set; }
         public List<string> IdsPaquetes { get; private set; }
-        public string WebResponse { get; private set; }
+        public string ResponseContent { get; private set; }
 
-        public static VerificacionResult CreateInstance(string codEstatus, string codigoEstadoSolicitud, string estadoSolicitud, string numeroCfdis, string mensaje, List<string> idsPaquetes, string webResponse)
+        public static VerificacionResult CreateInstance(string codEstatus,
+                                                        string codigoEstadoSolicitud,
+                                                        string estadoSolicitud,
+                                                        string numeroCfdis,
+                                                        string mensaje,
+                                                        List<string> idsPaquetes,
+                                                        string responseContent)
         {
             return new VerificacionResult
             {
@@ -26,7 +32,7 @@ namespace ARSoftware.Cfdi.DescargaMasiva.Models
                 NumeroCfdis = numeroCfdis,
                 Mensaje = mensaje,
                 IdsPaquetes = idsPaquetes,
-                WebResponse = webResponse
+                ResponseContent = responseContent
             };
         }
     }

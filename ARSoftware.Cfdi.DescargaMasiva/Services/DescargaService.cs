@@ -1,4 +1,5 @@
-﻿using System.Security.Cryptography.X509Certificates;
+﻿using System;
+using System.Security.Cryptography.X509Certificates;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Xml;
@@ -58,19 +59,6 @@ namespace ARSoftware.Cfdi.DescargaMasiva.Services
             return xmlDocument.OuterXml;
         }
 
-        public DescargaResult GetSoapResponseResult(SoapRequestResult soapRequestResult)
-        {
-            var xmlDocument = new XmlDocument();
-            xmlDocument.LoadXml(soapRequestResult.ResponseContent);
-
-            XmlNode element = xmlDocument.GetElementsByTagName("h:respuesta")[0];
-            string codEstatus = element.Attributes.GetNamedItem("CodEstatus").Value;
-            string mensaje = element.Attributes.GetNamedItem("Mensaje").Value;
-            string paqete = xmlDocument.GetElementsByTagName("Paquete")[0].InnerXml;
-
-            return DescargaResult.CreateInstance(codEstatus, mensaje, paqete, soapRequestResult.ResponseContent);
-        }
-
         public async Task<DescargaResult> SendSoapRequestAsync(string soapRequestContent,
                                                                string authorizationHttpRequestHeader,
                                                                CancellationToken cancellationToken)
@@ -82,6 +70,24 @@ namespace ARSoftware.Cfdi.DescargaMasiva.Services
                 cancellationToken);
 
             return GetSoapResponseResult(soapRequestResult);
+        }
+
+        public DescargaResult GetSoapResponseResult(SoapRequestResult soapRequestResult)
+        {
+            var xmlDocument = new XmlDocument();
+            xmlDocument.LoadXml(soapRequestResult.ResponseContent);
+
+            XmlNode element = xmlDocument.GetElementsByTagName("h:respuesta")[0];
+            if (element == null)
+            {
+                throw new ArgumentException("El resultado no estan en un formato valido.", nameof(soapRequestResult.ResponseContent));
+            }
+
+            string codEstatus = element.Attributes.GetNamedItem("CodEstatus").Value;
+            string mensaje = element.Attributes.GetNamedItem("Mensaje").Value;
+            string paqete = xmlDocument.GetElementsByTagName("Paquete")[0].InnerXml;
+
+            return DescargaResult.CreateInstance(codEstatus, mensaje, paqete, soapRequestResult.ResponseContent);
         }
     }
 }
