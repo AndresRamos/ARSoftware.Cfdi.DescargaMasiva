@@ -34,7 +34,12 @@ namespace ARSoftware.Cfdi.DescargaMasiva.Services
 
             var request = new HttpRequestMessage(HttpMethod.Post, new Uri(url));
             request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue(MediaTypeNames.Text.Xml));
-            request.Headers.Add("Authorization", authorizationRequestHeader);
+
+            if (!string.IsNullOrWhiteSpace(authorizationRequestHeader))
+            {
+                request.Headers.Add("Authorization", authorizationRequestHeader);
+            }
+
             request.Headers.Add("SOAPAction", soapAction);
 
             request.Content = new StringContent(requestContent, Encoding.UTF8, MediaTypeNames.Text.Xml);
