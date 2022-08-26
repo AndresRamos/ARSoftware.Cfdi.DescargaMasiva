@@ -7,12 +7,14 @@ namespace ARSoftware.Cfdi.DescargaMasiva.Interfaces
 {
     public interface ISolicitudService
     {
-        SolicitudResult GetSoapResponseResult(SoapRequestResult soapRequestResult);
+        string GenerateSoapRequestEnvelopeXmlContent(SolicitudRequest solicitudRequest, X509Certificate2 certificate);
 
-        Task<SolicitudResult> SendSoapRequestAsync(string soapRequestContent,
-                                                   string authorizationHttpRequestHeader,
+        Task<SoapRequestResult> SendSoapRequestAsync(string soapRequestContent, string token, CancellationToken cancellationToken);
+
+        Task<SolicitudResult> SendSoapRequestAsync(SolicitudRequest solicitudRequest,
+                                                   X509Certificate2 certificate,
                                                    CancellationToken cancellationToken);
 
-        string GenerateSoapRequestEnvelopeXmlContent(SolicitudRequest solicitudRequest, X509Certificate2 certificate);
+        SolicitudResult GetSoapResponseResult(SoapRequestResult soapRequestResult);
     }
 }

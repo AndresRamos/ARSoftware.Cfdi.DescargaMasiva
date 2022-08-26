@@ -22,6 +22,7 @@ namespace ARSoftware.Cfdi.DescargaMasiva.Models
         public string ThirdPartyRfc { get; private set; }
         public string Complement { get; private set; }
         public string Uuid { get; private set; }
+        public string Token { get; private set; }
 
         public bool HasDocumentType => DocumentType != null;
         public bool HasDocumentStatus => DocumentStatus != null;
@@ -34,6 +35,7 @@ namespace ARSoftware.Cfdi.DescargaMasiva.Models
                                                       string senderRfc,
                                                       IEnumerable<string> recipientsRfcs,
                                                       string requestingRfc,
+                                                      string token,
                                                       TipoComprobante documentType = null,
                                                       EstadoComprobante documentStatus = null,
                                                       string thirdPartyRfc = null,
@@ -54,6 +56,7 @@ namespace ARSoftware.Cfdi.DescargaMasiva.Models
                 SenderRfc = senderRfc,
                 RecipientsRfcs = recipients,
                 RequestingRfc = requestingRfc,
+                Token = token,
                 DocumentType = documentType,
                 DocumentStatus = documentStatus,
                 ThirdPartyRfc = thirdPartyRfc,

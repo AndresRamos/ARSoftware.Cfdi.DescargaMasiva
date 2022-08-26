@@ -33,41 +33,36 @@ public class Program
         // Autenticacion
         var autenticacionService = host.Services.GetRequiredService<IAutenticacionService>();
         var autenticacionRequest = AutenticacionRequest.CreateInstance();
-        string? soapRequestEnvelopeXml = autenticacionService.GenerateSoapRequestEnvelopeXmlContent(autenticacionRequest, certificadoSat);
         AutenticacionResult? autenticacionResult =
-            await autenticacionService.SendSoapRequestAsync(soapRequestEnvelopeXml, cancellationToken);
-        string? authorizationHttpRequestHeader = SoapRequestHelper.CreateAutorizationHttpHeaderStringFromToken(autenticacionResult.Token);
+            await autenticacionService.SendSoapRequestAsync(autenticacionRequest, certificadoSat, cancellationToken);
 
         // Solicitud
         var solicitudService = host.Services.GetRequiredService<ISolicitudService>();
-        var solicitudRequest = SolicitudRequest.CreateInstance(
-            fechaInicio,
+        var solicitudRequest = SolicitudRequest.CreateInstance(fechaInicio,
             fechaFin,
             tipoSolicitud,
             rfcEmisor,
             rfcReceptores,
-            rfcSolicitante);
-        soapRequestEnvelopeXml = solicitudService.GenerateSoapRequestEnvelopeXmlContent(solicitudRequest, certificadoSat);
-        SolicitudResult? solicitudResult =
-            await solicitudService.SendSoapRequestAsync(soapRequestEnvelopeXml, authorizationHttpRequestHeader, cancellationToken);
+            rfcSolicitante,
+            autenticacionResult.Token);
+        SolicitudResult? solicitudResult = await solicitudService.SendSoapRequestAsync(solicitudRequest, certificadoSat, cancellationToken);
 
         // Verificacion
         var verificaSolicitudService = host.Services.GetRequiredService<IVerificacionService>();
-        var verificacionRequest = VerificacionRequest.CreateInstance(solicitudResult.IdSolicitud, rfcSolicitante);
-        soapRequestEnvelopeXml = verificaSolicitudService.GenerateSoapRequestEnvelopeXmlContent(verificacionRequest, certificadoSat);
-        VerificacionResult? verificacionResult =
-            await verificaSolicitudService.SendSoapRequestAsync(soapRequestEnvelopeXml, authorizationHttpRequestHeader, cancellationToken);
+        var verificacionRequest =
+            VerificacionRequest.CreateInstance(solicitudResult.IdSolicitud, rfcSolicitante, autenticacionResult.Token);
+        VerificacionResult? verificacionResult = await verificaSolicitudService.SendSoapRequestAsync(verificacionRequest,
+            certificadoSat,
+            cancellationToken);
 
         // Descarga
         var descargarSolicitudService = host.Services.GetRequiredService<IDescargaService>();
         foreach (string? idsPaquete in verificacionResult.IdsPaquetes)
         {
-            var descargaRequest = DescargaRequest.CreateInstace(idsPaquete, rfcSolicitante);
-            soapRequestEnvelopeXml = descargarSolicitudService.GenerateSoapRequestEnvelopeXmlContent(descargaRequest, certificadoSat);
-            DescargaResult? descargaResult =
-                await descargarSolicitudService.SendSoapRequestAsync(soapRequestEnvelopeXml,
-                    authorizationHttpRequestHeader,
-                    cancellationToken);
+            var descargaRequest = DescargaRequest.CreateInstace(idsPaquete, rfcSolicitante, autenticacionResult.Token);
+            DescargaResult? descargaResult = await descargarSolicitudService.SendSoapRequestAsync(descargaRequest,
+                certificadoSat,
+                cancellationToken);
 
             string fileName = Path.Combine(@"C:\CFDIS", $"{idsPaquete}.zip");
             byte[] paqueteContenido = Convert.FromBase64String(descargaResult.Paquete);

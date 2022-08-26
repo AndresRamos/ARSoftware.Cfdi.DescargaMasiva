@@ -27,7 +27,7 @@ namespace ARSoftware.Cfdi.DescargaMasiva.Helpers
             return date.ToString("yyyy-MM-dd") + "T23:59:59";
         }
 
-        public static string CreateAutorizationHttpHeaderStringFromToken(string token)
+        public static string CreateHttpAuthorizationHeaderFromToken(string token)
         {
             return $@"WRAP access_token=""{HttpUtility.UrlDecode(token)}""";
         }

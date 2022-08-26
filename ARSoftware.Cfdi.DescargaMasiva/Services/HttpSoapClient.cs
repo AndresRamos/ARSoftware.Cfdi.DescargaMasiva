@@ -5,6 +5,7 @@ using System.Net.Mime;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using ARSoftware.Cfdi.DescargaMasiva.Helpers;
 using ARSoftware.Cfdi.DescargaMasiva.Interfaces;
 using ARSoftware.Cfdi.DescargaMasiva.Models;
 
@@ -21,8 +22,8 @@ namespace ARSoftware.Cfdi.DescargaMasiva.Services
 
         public async Task<SoapRequestResult> SendRequestAsync(string url,
                                                               string soapAction,
+                                                              string token,
                                                               string requestContent,
-                                                              string authorizationRequestHeader,
                                                               CancellationToken cancellationToken)
         {
             if (requestContent == null)
@@ -35,9 +36,9 @@ namespace ARSoftware.Cfdi.DescargaMasiva.Services
             var request = new HttpRequestMessage(HttpMethod.Post, new Uri(url));
             request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue(MediaTypeNames.Text.Xml));
 
-            if (!string.IsNullOrWhiteSpace(authorizationRequestHeader))
+            if (!string.IsNullOrWhiteSpace(token))
             {
-                request.Headers.Add("Authorization", authorizationRequestHeader);
+                request.Headers.Add("Authorization", SoapRequestHelper.CreateHttpAuthorizationHeaderFromToken(token));
             }
 
             request.Headers.Add("SOAPAction", soapAction);

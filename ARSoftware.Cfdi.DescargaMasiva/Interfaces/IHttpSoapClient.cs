@@ -8,8 +8,8 @@ namespace ARSoftware.Cfdi.DescargaMasiva.Interfaces
     {
         Task<SoapRequestResult> SendRequestAsync(string url,
                                                  string soapAction,
+                                                 string token,
                                                  string requestContent,
-                                                 string authorizationRequestHeader,
                                                  CancellationToken cancellationToken);
     }
 }

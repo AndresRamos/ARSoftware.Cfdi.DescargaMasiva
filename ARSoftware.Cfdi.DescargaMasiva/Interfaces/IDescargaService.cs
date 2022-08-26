@@ -8,10 +8,13 @@ namespace ARSoftware.Cfdi.DescargaMasiva.Interfaces
     public interface IDescargaService
     {
         string GenerateSoapRequestEnvelopeXmlContent(DescargaRequest descargaRequest, X509Certificate2 certificate);
+
         DescargaResult GetSoapResponseResult(SoapRequestResult soapRequestResult);
 
-        Task<DescargaResult> SendSoapRequestAsync(string soapRequestContent,
-                                                  string authorizationHttpRequestHeader,
+        Task<SoapRequestResult> SendSoapRequestAsync(string soapRequestContent, string token, CancellationToken cancellationToken);
+
+        Task<DescargaResult> SendSoapRequestAsync(DescargaRequest descargaRequest,
+                                                  X509Certificate2 certificate,
                                                   CancellationToken cancellationToken);
     }
 }
