@@ -15,7 +15,13 @@ public class Program
     {
         CancellationToken cancellationToken = CancellationTokenSource.Token;
 
-        IHost host = Host.CreateDefaultBuilder(args).ConfigureServices(services => { services.AddCfdiDescargaMasivaServices(); }).Build();
+        IHost host = Host.CreateDefaultBuilder(args)
+            .ConfigureServices(services =>
+            {
+                // Registrar servicios de descarga masiva
+                services.AddCfdiDescargaMasivaServices();
+            })
+            .Build();
 
         await host.StartAsync(cancellationToken);
 
@@ -44,13 +50,13 @@ public class Program
             rfcEmisor,
             rfcReceptores,
             rfcSolicitante,
-            autenticacionResult.Token);
+            autenticacionResult.AccessToken);
         SolicitudResult? solicitudResult = await solicitudService.SendSoapRequestAsync(solicitudRequest, certificadoSat, cancellationToken);
 
         // Verificacion
         var verificaSolicitudService = host.Services.GetRequiredService<IVerificacionService>();
         var verificacionRequest =
-            VerificacionRequest.CreateInstance(solicitudResult.IdSolicitud, rfcSolicitante, autenticacionResult.Token);
+            VerificacionRequest.CreateInstance(solicitudResult.IdSolicitud, rfcSolicitante, autenticacionResult.AccessToken);
         VerificacionResult? verificacionResult = await verificaSolicitudService.SendSoapRequestAsync(verificacionRequest,
             certificadoSat,
             cancellationToken);
@@ -59,7 +65,7 @@ public class Program
         var descargarSolicitudService = host.Services.GetRequiredService<IDescargaService>();
         foreach (string? idsPaquete in verificacionResult.IdsPaquetes)
         {
-            var descargaRequest = DescargaRequest.CreateInstace(idsPaquete, rfcSolicitante, autenticacionResult.Token);
+            var descargaRequest = DescargaRequest.CreateInstace(idsPaquete, rfcSolicitante, autenticacionResult.AccessToken);
             DescargaResult? descargaResult = await descargarSolicitudService.SendSoapRequestAsync(descargaRequest,
                 certificadoSat,
                 cancellationToken);

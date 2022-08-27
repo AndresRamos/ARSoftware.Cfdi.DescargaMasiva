@@ -9,12 +9,14 @@ namespace ARSoftware.Cfdi.DescargaMasiva.Interfaces
     {
         string GenerateSoapRequestEnvelopeXmlContent(VerificacionRequest verificacionRequest, X509Certificate2 certificate);
 
-        VerificacionResult GetSoapResponseResult(SoapRequestResult soapRequestResult);
-
-        Task<SoapRequestResult> SendSoapRequestAsync(string soapRequestContent, string token, CancellationToken cancellationToken);
+        Task<SoapRequestResult> SendSoapRequestAsync(string soapRequestContent,
+                                                     AccessToken accessToken,
+                                                     CancellationToken cancellationToken);
 
         Task<VerificacionResult> SendSoapRequestAsync(VerificacionRequest verificacionRequest,
                                                       X509Certificate2 certificate,
                                                       CancellationToken cancellationToken);
+
+        VerificacionResult GetSoapResponseResult(SoapRequestResult soapRequestResult);
     }
 }

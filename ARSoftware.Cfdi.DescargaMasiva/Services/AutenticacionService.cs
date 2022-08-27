@@ -102,7 +102,7 @@ namespace ARSoftware.Cfdi.DescargaMasiva.Services
             return xmlDocument.OuterXml;
         }
 
-        public async Task<SoapRequestResult> SendSoapRequestAsync(string soapRequestContent, CancellationToken cancellationToken)
+        public async Task<SoapRequestResult> SendSoapRequestAsync(string soapRequestContent, CancellationToken cancellationToken = default)
         {
             return await _httpSoapClient.SendRequestAsync(CfdiDescargaMasivaWebServiceUrls.AutenticacionUrl,
                 CfdiDescargaMasivaWebServiceUrls.AutenticacionSoapActionUrl,
@@ -113,7 +113,7 @@ namespace ARSoftware.Cfdi.DescargaMasiva.Services
 
         public async Task<AutenticacionResult> SendSoapRequestAsync(AutenticacionRequest autenticacionRequest,
                                                                     X509Certificate2 certificate,
-                                                                    CancellationToken cancellationToken)
+                                                                    CancellationToken cancellationToken = default)
         {
             string soapRequestContent = GenerateSoapRequestEnvelopeXmlContent(autenticacionRequest, certificate);
 
@@ -134,8 +134,8 @@ namespace ARSoftware.Cfdi.DescargaMasiva.Services
             XmlNode autenticaResultElement = xmlDocument.GetElementsByTagName("AutenticaResult")[0];
             if (autenticaResultElement != null)
             {
-                string token = autenticaResultElement.InnerXml;
-                return AutenticacionResult.CreateInstance(token, null, null, soapRequestResult.ResponseContent);
+                var accessToken = AccessToken.CreateInstance(autenticaResultElement.InnerXml);
+                return AutenticacionResult.CreateSuccess(accessToken, soapRequestResult.ResponseContent);
             }
 
             XmlNode errorElement = xmlDocument.GetElementsByTagName("s:Fault")[0];
@@ -146,7 +146,7 @@ namespace ARSoftware.Cfdi.DescargaMasiva.Services
 
             string faultCode = xmlDocument.GetElementsByTagName("faultcode")[0].InnerXml;
             string faultString = xmlDocument.GetElementsByTagName("faultstring")[0].InnerXml;
-            return AutenticacionResult.CreateInstance(null, faultCode, faultString, soapRequestResult.ResponseContent);
+            return AutenticacionResult.CreateFailure(faultCode, faultString, soapRequestResult.ResponseContent);
         }
     }
 }

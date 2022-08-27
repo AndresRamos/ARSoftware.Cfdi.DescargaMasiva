@@ -60,25 +60,25 @@ namespace ARSoftware.Cfdi.DescargaMasiva.Services
         }
 
         public async Task<SoapRequestResult> SendSoapRequestAsync(string soapRequestContent,
-                                                                  string token,
-                                                                  CancellationToken cancellationToken)
+                                                                  AccessToken accessToken,
+                                                                  CancellationToken cancellationToken = default)
         {
             return await _httpSoapClient.SendRequestAsync(CfdiDescargaMasivaWebServiceUrls.DescargaUrl,
                 CfdiDescargaMasivaWebServiceUrls.DescargaSoapActionUrl,
-                token,
+                accessToken,
                 soapRequestContent,
                 cancellationToken);
         }
 
         public async Task<DescargaResult> SendSoapRequestAsync(DescargaRequest descargaRequest,
                                                                X509Certificate2 certificate,
-                                                               CancellationToken cancellationToken)
+                                                               CancellationToken cancellationToken = default)
         {
             string soapRequestContent = GenerateSoapRequestEnvelopeXmlContent(descargaRequest, certificate);
 
             SoapRequestResult soapRequestResult = await _httpSoapClient.SendRequestAsync(CfdiDescargaMasivaWebServiceUrls.DescargaUrl,
                 CfdiDescargaMasivaWebServiceUrls.DescargaSoapActionUrl,
-                descargaRequest.Token,
+                descargaRequest.AccessToken,
                 soapRequestContent,
                 cancellationToken);
 

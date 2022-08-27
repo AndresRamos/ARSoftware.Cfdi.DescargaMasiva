@@ -22,7 +22,7 @@ namespace ARSoftware.Cfdi.DescargaMasiva.Models
         public string ThirdPartyRfc { get; private set; }
         public string Complement { get; private set; }
         public string Uuid { get; private set; }
-        public string Token { get; private set; }
+        public AccessToken AccessToken { get; private set; }
 
         public bool HasDocumentType => DocumentType != null;
         public bool HasDocumentStatus => DocumentStatus != null;
@@ -35,12 +35,12 @@ namespace ARSoftware.Cfdi.DescargaMasiva.Models
                                                       string senderRfc,
                                                       IEnumerable<string> recipientsRfcs,
                                                       string requestingRfc,
-                                                      string token,
+                                                      AccessToken accessToken,
                                                       TipoComprobante documentType = null,
                                                       EstadoComprobante documentStatus = null,
-                                                      string thirdPartyRfc = null,
-                                                      string complement = null,
-                                                      string uuid = null)
+                                                      string thirdPartyRfc = "",
+                                                      string complement = "",
+                                                      string uuid = "")
         {
             List<string> recipients = recipientsRfcs.ToList();
             if (recipients.Any() && recipients.Count > 5)
@@ -56,7 +56,7 @@ namespace ARSoftware.Cfdi.DescargaMasiva.Models
                 SenderRfc = senderRfc,
                 RecipientsRfcs = recipients,
                 RequestingRfc = requestingRfc,
-                Token = token,
+                AccessToken = accessToken,
                 DocumentType = documentType,
                 DocumentStatus = documentStatus,
                 ThirdPartyRfc = thirdPartyRfc,

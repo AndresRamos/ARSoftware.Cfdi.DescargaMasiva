@@ -5,7 +5,6 @@ using System.Net.Mime;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using ARSoftware.Cfdi.DescargaMasiva.Helpers;
 using ARSoftware.Cfdi.DescargaMasiva.Interfaces;
 using ARSoftware.Cfdi.DescargaMasiva.Models;
 
@@ -22,11 +21,11 @@ namespace ARSoftware.Cfdi.DescargaMasiva.Services
 
         public async Task<SoapRequestResult> SendRequestAsync(string url,
                                                               string soapAction,
-                                                              string token,
+                                                              AccessToken accessToken,
                                                               string requestContent,
                                                               CancellationToken cancellationToken)
         {
-            if (requestContent == null)
+            if (requestContent is null)
             {
                 throw new ArgumentNullException(nameof(requestContent), "El xml no puede ser nulo.");
             }
@@ -36,9 +35,9 @@ namespace ARSoftware.Cfdi.DescargaMasiva.Services
             var request = new HttpRequestMessage(HttpMethod.Post, new Uri(url));
             request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue(MediaTypeNames.Text.Xml));
 
-            if (!string.IsNullOrWhiteSpace(token))
+            if (accessToken.IsValid)
             {
-                request.Headers.Add("Authorization", SoapRequestHelper.CreateHttpAuthorizationHeaderFromToken(token));
+                request.Headers.Add("Authorization", accessToken.HttpAuthorizationHeader);
             }
 
             request.Headers.Add("SOAPAction", soapAction);
