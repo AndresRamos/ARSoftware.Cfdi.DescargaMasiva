@@ -4,6 +4,8 @@ namespace ARSoftware.Cfdi.DescargaMasiva.Enumerations
 {
     public sealed class TipoComprobante : SmartEnum<TipoComprobante, string>
     {
+        public static readonly TipoComprobante Null = new TipoComprobante("Null", "Ninguno");
+
         public static readonly TipoComprobante Ingreso = new TipoComprobante("Ingreso", "I");
         public static readonly TipoComprobante Egreso = new TipoComprobante("Egreso", "E");
         public static readonly TipoComprobante Traslado = new TipoComprobante("Traslado", "T");

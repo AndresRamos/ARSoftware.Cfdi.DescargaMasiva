@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Xml;
 using ARSoftware.Cfdi.DescargaMasiva.Constants;
+using ARSoftware.Cfdi.DescargaMasiva.Exceptions;
 using ARSoftware.Cfdi.DescargaMasiva.Helpers;
 using ARSoftware.Cfdi.DescargaMasiva.Interfaces;
 using ARSoftware.Cfdi.DescargaMasiva.Models;
@@ -106,7 +107,7 @@ namespace ARSoftware.Cfdi.DescargaMasiva.Services
         {
             return await _httpSoapClient.SendRequestAsync(CfdiDescargaMasivaWebServiceUrls.AutenticacionUrl,
                 CfdiDescargaMasivaWebServiceUrls.AutenticacionSoapActionUrl,
-                null,
+                AccessToken.CreateEmpty(),
                 soapRequestContent,
                 cancellationToken);
         }
@@ -119,7 +120,7 @@ namespace ARSoftware.Cfdi.DescargaMasiva.Services
 
             SoapRequestResult soapRequestResult = await _httpSoapClient.SendRequestAsync(CfdiDescargaMasivaWebServiceUrls.AutenticacionUrl,
                 CfdiDescargaMasivaWebServiceUrls.AutenticacionSoapActionUrl,
-                null,
+                AccessToken.CreateEmpty(),
                 soapRequestContent,
                 cancellationToken);
 
@@ -135,18 +136,22 @@ namespace ARSoftware.Cfdi.DescargaMasiva.Services
             if (autenticaResultElement != null)
             {
                 var accessToken = AccessToken.CreateInstance(autenticaResultElement.InnerXml);
-                return AutenticacionResult.CreateSuccess(accessToken, soapRequestResult.ResponseContent);
+                return AutenticacionResult.CreateSuccess(accessToken, soapRequestResult.HttpStatusCode, soapRequestResult.ResponseContent);
             }
 
             XmlNode errorElement = xmlDocument.GetElementsByTagName("s:Fault")[0];
-            if (errorElement == null)
+            if (errorElement is null)
             {
-                throw new ArgumentException("El resultado no estan en un formato valido.", nameof(soapRequestResult.ResponseContent));
+                throw new InvalidResponseContentException("Elements AutenticaResult and s:Fault are missing in response.",
+                    soapRequestResult.ResponseContent);
             }
 
             string faultCode = xmlDocument.GetElementsByTagName("faultcode")[0].InnerXml;
             string faultString = xmlDocument.GetElementsByTagName("faultstring")[0].InnerXml;
-            return AutenticacionResult.CreateFailure(faultCode, faultString, soapRequestResult.ResponseContent);
+            return AutenticacionResult.CreateFailure(faultCode,
+                faultString,
+                soapRequestResult.HttpStatusCode,
+                soapRequestResult.ResponseContent);
         }
     }
 }

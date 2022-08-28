@@ -1,19 +1,32 @@
-﻿using System.Net;
+﻿using System;
+using System.Net;
 
 namespace ARSoftware.Cfdi.DescargaMasiva.Models
 {
+    /// <summary>
+    ///     Resultado de la peticion SOAP
+    /// </summary>
     public class SoapRequestResult
     {
-        private SoapRequestResult()
+        private SoapRequestResult(HttpStatusCode httpStatusCode, string responseContent)
         {
+            HttpStatusCode = httpStatusCode;
+            ResponseContent = responseContent ?? throw new ArgumentNullException(nameof(responseContent));
         }
 
-        public HttpStatusCode HttpStatusCode { get; private set; }
-        public string ResponseContent { get; private set; }
+        /// <summary>
+        ///     Codigo de estatus de la respuesta HTTP.
+        /// </summary>
+        public HttpStatusCode HttpStatusCode { get; }
+
+        /// <summary>
+        ///     Contenido del mensage de la respuesta HTTP.
+        /// </summary>
+        public string ResponseContent { get; }
 
         public static SoapRequestResult CreateInstance(HttpStatusCode httpStatusCode, string responseContent)
         {
-            return new SoapRequestResult { HttpStatusCode = httpStatusCode, ResponseContent = responseContent };
+            return new SoapRequestResult(httpStatusCode, responseContent);
         }
     }
 }

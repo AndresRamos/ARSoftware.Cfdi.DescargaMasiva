@@ -1,9 +1,9 @@
-﻿using System;
-using System.Security.Cryptography.X509Certificates;
+﻿using System.Security.Cryptography.X509Certificates;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Xml;
 using ARSoftware.Cfdi.DescargaMasiva.Constants;
+using ARSoftware.Cfdi.DescargaMasiva.Exceptions;
 using ARSoftware.Cfdi.DescargaMasiva.Helpers;
 using ARSoftware.Cfdi.DescargaMasiva.Interfaces;
 using ARSoftware.Cfdi.DescargaMasiva.Models;
@@ -93,19 +93,24 @@ namespace ARSoftware.Cfdi.DescargaMasiva.Services
             XmlNode element = xmlDocument.GetElementsByTagName("h:respuesta")[0];
             if (element is null)
             {
-                throw new ArgumentException("El resultado no estan en un formato valido.", nameof(soapRequestResult.ResponseContent));
+                throw new InvalidResponseContentException("Element h:respuesta is missing in response.", soapRequestResult.ResponseContent);
             }
 
             if (element.Attributes is null)
             {
-                throw new ArgumentException("El nodo no tiene atributos.", nameof(soapRequestResult.ResponseContent));
+                throw new InvalidResponseContentException("Attributes property of Element h:respuesta is null.",
+                    soapRequestResult.ResponseContent);
             }
 
-            string codEstatus = element.Attributes.GetNamedItem("CodEstatus").Value;
-            string mensaje = element.Attributes.GetNamedItem("Mensaje").Value;
-            string paqete = xmlDocument.GetElementsByTagName("Paquete")[0].InnerXml;
+            string package = xmlDocument.GetElementsByTagName("Paquete")[0].InnerXml;
+            string requestStatusCode = element.Attributes.GetNamedItem("CodEstatus")?.Value ?? string.Empty;
+            string requestStatusMessage = element.Attributes.GetNamedItem("Mensaje")?.Value ?? string.Empty;
 
-            return DescargaResult.CreateInstance(codEstatus, mensaje, paqete, soapRequestResult.ResponseContent);
+            return DescargaResult.CreateInstance(package,
+                requestStatusCode,
+                requestStatusMessage,
+                soapRequestResult.HttpStatusCode,
+                soapRequestResult.ResponseContent);
         }
     }
 }

@@ -33,6 +33,7 @@ public class Program
         var rfcEmisor = "";
         var rfcReceptores = new List<string> { "" };
         var rfcSolicitante = "";
+        var rutaDescarga = @"C:\CFDIS";
 
         X509Certificate2? certificadoSat = X509Certificate2Helper.GetCertificate(certificadoPfx, certificadoPassword);
 
@@ -56,22 +57,22 @@ public class Program
         // Verificacion
         var verificaSolicitudService = host.Services.GetRequiredService<IVerificacionService>();
         var verificacionRequest =
-            VerificacionRequest.CreateInstance(solicitudResult.IdSolicitud, rfcSolicitante, autenticacionResult.AccessToken);
+            VerificacionRequest.CreateInstance(solicitudResult.RequestId, rfcSolicitante, autenticacionResult.AccessToken);
         VerificacionResult? verificacionResult = await verificaSolicitudService.SendSoapRequestAsync(verificacionRequest,
             certificadoSat,
             cancellationToken);
 
         // Descarga
         var descargarSolicitudService = host.Services.GetRequiredService<IDescargaService>();
-        foreach (string? idsPaquete in verificacionResult.IdsPaquetes)
+        foreach (string? idsPaquete in verificacionResult.PackageIds)
         {
             var descargaRequest = DescargaRequest.CreateInstace(idsPaquete, rfcSolicitante, autenticacionResult.AccessToken);
             DescargaResult? descargaResult = await descargarSolicitudService.SendSoapRequestAsync(descargaRequest,
                 certificadoSat,
                 cancellationToken);
 
-            string fileName = Path.Combine(@"C:\CFDIS", $"{idsPaquete}.zip");
-            byte[] paqueteContenido = Convert.FromBase64String(descargaResult.Paquete);
+            string fileName = Path.Combine(rutaDescarga, $"{idsPaquete}.zip");
+            byte[] paqueteContenido = Convert.FromBase64String(descargaResult.Package);
 
             using (FileStream fileStream = File.Create(fileName, paqueteContenido.Length))
             {

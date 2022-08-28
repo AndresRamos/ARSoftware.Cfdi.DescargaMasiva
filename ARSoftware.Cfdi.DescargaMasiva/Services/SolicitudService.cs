@@ -1,9 +1,9 @@
-﻿using System;
-using System.Security.Cryptography.X509Certificates;
+﻿using System.Security.Cryptography.X509Certificates;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Xml;
 using ARSoftware.Cfdi.DescargaMasiva.Constants;
+using ARSoftware.Cfdi.DescargaMasiva.Exceptions;
 using ARSoftware.Cfdi.DescargaMasiva.Helpers;
 using ARSoftware.Cfdi.DescargaMasiva.Interfaces;
 using ARSoftware.Cfdi.DescargaMasiva.Models;
@@ -134,18 +134,25 @@ namespace ARSoftware.Cfdi.DescargaMasiva.Services
             XmlNode element = xmlDocument.GetElementsByTagName("SolicitaDescargaResult")[0];
             if (element is null)
             {
-                throw new ArgumentException("El resultado no estan en un formato valido.", nameof(soapRequestResult.ResponseContent));
+                throw new InvalidResponseContentException("Element SolicitaDescargaResult is missing in response.",
+                    soapRequestResult.ResponseContent);
             }
 
             if (element.Attributes is null)
             {
-                throw new ArgumentException("El nodo no tiene atributos.", nameof(soapRequestResult.ResponseContent));
+                throw new InvalidResponseContentException("Attributes property of Element SolicitaDescargaResult is null.",
+                    soapRequestResult.ResponseContent);
             }
 
-            string codEstatus = element.Attributes.GetNamedItem("CodEstatus")?.Value;
-            string mensaje = element.Attributes.GetNamedItem("Mensaje")?.Value;
-            string idSolicitud = element.Attributes.GetNamedItem("IdSolicitud")?.Value;
-            return SolicitudResult.CreateInstance(codEstatus, idSolicitud, mensaje, soapRequestResult.ResponseContent);
+            string requestId = element.Attributes.GetNamedItem("IdSolicitud")?.Value ?? string.Empty;
+            string requestStatusCode = element.Attributes.GetNamedItem("CodEstatus")?.Value ?? string.Empty;
+            string requestStatusMessage = element.Attributes.GetNamedItem("Mensaje")?.Value ?? string.Empty;
+
+            return SolicitudResult.CreateInstance(requestId,
+                requestStatusCode,
+                requestStatusMessage,
+                soapRequestResult.HttpStatusCode,
+                soapRequestResult.ResponseContent);
         }
     }
 }

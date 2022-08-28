@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Xml;
 using ARSoftware.Cfdi.DescargaMasiva.Constants;
+using ARSoftware.Cfdi.DescargaMasiva.Exceptions;
 using ARSoftware.Cfdi.DescargaMasiva.Helpers;
 using ARSoftware.Cfdi.DescargaMasiva.Interfaces;
 using ARSoftware.Cfdi.DescargaMasiva.Models;
@@ -91,46 +91,46 @@ namespace ARSoftware.Cfdi.DescargaMasiva.Services
             var xmlDocument = new XmlDocument();
             xmlDocument.LoadXml(soapRequestResult.ResponseContent);
 
-            if (xmlDocument.GetElementsByTagName("VerificaSolicitudDescargaResult").Count <= 0)
-            {
-                throw new ArgumentException("El resultado no estan en un formato valido.", nameof(soapRequestResult.ResponseContent));
-            }
-
             XmlNode verificaSolicitudDescargaResultElement = xmlDocument.GetElementsByTagName("VerificaSolicitudDescargaResult")[0];
             if (verificaSolicitudDescargaResultElement is null)
             {
-                throw new ArgumentException("El resultado no estan en un formato valido.", nameof(soapRequestResult.ResponseContent));
+                throw new InvalidResponseContentException("Element VerificaSolicitudDescargaResult is missing in response.",
+                    soapRequestResult.ResponseContent);
             }
 
             if (verificaSolicitudDescargaResultElement.Attributes is null)
             {
-                throw new ArgumentException("El nodo no tiene atributos.", nameof(soapRequestResult.ResponseContent));
+                throw new InvalidResponseContentException("Attributes property of Element VerificaSolicitudDescargaResult is null.",
+                    soapRequestResult.ResponseContent);
             }
 
-            string codigoEstadoSolicitud = verificaSolicitudDescargaResultElement.Attributes.GetNamedItem("CodigoEstadoSolicitud")?.Value;
-            string estadoSolicitud = verificaSolicitudDescargaResultElement.Attributes.GetNamedItem("EstadoSolicitud")?.Value;
-            string codEstatus = verificaSolicitudDescargaResultElement.Attributes.GetNamedItem("CodEstatus")?.Value;
-            string numeroCfdis = verificaSolicitudDescargaResultElement.Attributes.GetNamedItem("NumeroCFDIs")?.Value;
-            string mensaje = verificaSolicitudDescargaResultElement.Attributes.GetNamedItem("Mensaje")?.Value;
+            string downloadRequestStatusNumber = verificaSolicitudDescargaResultElement.Attributes.GetNamedItem("EstadoSolicitud")?.Value ??
+                                                 string.Empty;
+            string downloadRequestStatusCode =
+                verificaSolicitudDescargaResultElement.Attributes.GetNamedItem("CodigoEstadoSolicitud")?.Value ?? string.Empty;
+            string numberOfCfdis = verificaSolicitudDescargaResultElement.Attributes.GetNamedItem("NumeroCFDIs")?.Value ?? string.Empty;
+            string requestStatusCode = verificaSolicitudDescargaResultElement.Attributes.GetNamedItem("CodEstatus")?.Value ?? string.Empty;
+            string requestStatusMessage = verificaSolicitudDescargaResultElement.Attributes.GetNamedItem("Mensaje")?.Value ?? string.Empty;
 
-            var idsPaquetesList = new List<string>();
+            var packageIdsList = new List<string>();
 
-            if (estadoSolicitud == "3")
+            if (downloadRequestStatusNumber == "3")
             {
                 XmlNodeList idsPaquetesElements = xmlDocument.GetElementsByTagName("IdsPaquetes");
 
                 foreach (XmlNode idPaqueteElement in idsPaquetesElements)
                 {
-                    idsPaquetesList.Add(idPaqueteElement.InnerText);
+                    packageIdsList.Add(idPaqueteElement.InnerText);
                 }
             }
 
-            return VerificacionResult.CreateInstance(codEstatus,
-                codigoEstadoSolicitud,
-                estadoSolicitud,
-                numeroCfdis,
-                mensaje,
-                idsPaquetesList,
+            return VerificacionResult.CreateInstance(packageIdsList,
+                downloadRequestStatusNumber,
+                downloadRequestStatusCode,
+                numberOfCfdis,
+                requestStatusCode,
+                requestStatusMessage,
+                soapRequestResult.HttpStatusCode,
                 soapRequestResult.ResponseContent);
         }
     }

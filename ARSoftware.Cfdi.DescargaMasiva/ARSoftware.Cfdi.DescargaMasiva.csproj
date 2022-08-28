@@ -3,7 +3,7 @@
 	<PropertyGroup>
 		<TargetFramework>netstandard2.0</TargetFramework>
 		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-		<Version>2.0.0-beta.5</Version>
+		<Version>2.0.0-beta.7</Version>
 		<Authors>AR Software</Authors>
 		<Product>ARSoftware Cfdi Descarga Masiva</Product>
 		<Description>Clases y servicios para descargar los CFDI de forma masiva utilizando el web service del SAT.</Description>
@@ -24,7 +24,7 @@
 	</ItemGroup>
 	
 	<ItemGroup>
-		<None Include="Images\AR_LOGO03.jpg" Pack="true" PackagePath="\"/>
+		<None Include="Images\AR_LOGO03.jpg" Pack="true" PackagePath="\" />
 	</ItemGroup>
 
 </Project>
