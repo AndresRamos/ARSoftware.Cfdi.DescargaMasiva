@@ -3,17 +3,18 @@
 namespace ARSoftware.Cfdi.DescargaMasiva.Enumerations
 {
     /// <summary>
-    ///     Mensajes recibidos desde la operación VerificaSolicitudDescarga y Descargar.
+    ///     Código de estatus de la solicitud. Mensajes recibidos desde la operación SolicitaDescarga,
+    ///     VerificaSolicitudDescarga y Descargar.
     /// </summary>
     public sealed class CodigoEstatusSolicitud : SmartEnum<CodigoEstatusSolicitud>
     {
         /// <summary>
-        ///     Usuario No Válido
+        ///     300 = Usuario No Válido
         /// </summary>
         public static readonly CodigoEstatusSolicitud _300 = new CodigoEstatusSolicitud("300", 300, "Usuario No Válido", "");
 
         /// <summary>
-        ///     XML Mal Formado
+        ///     301 = XML Mal Formado
         /// </summary>
         public static readonly CodigoEstatusSolicitud _301 = new CodigoEstatusSolicitud("301",
             301,
@@ -21,18 +22,18 @@ namespace ARSoftware.Cfdi.DescargaMasiva.Enumerations
             "Este código de error se regresa cuando el request posee información invalida, ejemplo: un RFC de receptor no valido");
 
         /// <summary>
-        ///     Sello Mal Formado
+        ///     302 = Sello Mal Formado
         /// </summary>
         public static readonly CodigoEstatusSolicitud _302 = new CodigoEstatusSolicitud("302", 302, "Sello Mal Formado", "");
 
         /// <summary>
-        ///     Sello no corresponde con RfcSolicitante
+        ///     303 = Sello no corresponde con RfcSolicitante
         /// </summary>
         public static readonly CodigoEstatusSolicitud _303 =
             new CodigoEstatusSolicitud("303", 303, "Sello no corresponde con RfcSolicitante", "");
 
         /// <summary>
-        ///     Certificado Revocado o Caduco
+        ///     304 = Certificado Revocado o Caduco
         /// </summary>
         public static readonly CodigoEstatusSolicitud _304 = new CodigoEstatusSolicitud("304",
             304,
@@ -40,7 +41,7 @@ namespace ARSoftware.Cfdi.DescargaMasiva.Enumerations
             "El certificado fue revocado o bien la fecha de vigencia expiró");
 
         /// <summary>
-        ///     Certificado Inválido
+        ///     305 = Certificado Inválido
         /// </summary>
         public static readonly CodigoEstatusSolicitud _305 = new CodigoEstatusSolicitud("305",
             305,
@@ -48,7 +49,7 @@ namespace ARSoftware.Cfdi.DescargaMasiva.Enumerations
             "El certificado puede ser invalido por múltiples razones como son el tipo, codificación incorrecta, etc.");
 
         /// <summary>
-        ///     Error no Controlado
+        ///     404 = Error no Controlado
         /// </summary>
         public static readonly CodigoEstatusSolicitud _404 = new CodigoEstatusSolicitud("404",
             404,
@@ -56,13 +57,13 @@ namespace ARSoftware.Cfdi.DescargaMasiva.Enumerations
             "Error genérico, en caso de presentarse realizar nuevamente la petición y si persiste el error levantar un RMA.");
 
         /// <summary>
-        ///     Solicitud de descarga recibida con éxito
+        ///     5000 = Solicitud de descarga recibida con éxito
         /// </summary>
         public static readonly CodigoEstatusSolicitud _5000 =
             new CodigoEstatusSolicitud("5000", 5000, "Solicitud de descarga recibida con éxito", "");
 
         /// <summary>
-        ///     Tercero no autorizado
+        ///     5001 = Tercero no autorizado
         /// </summary>
         public static readonly CodigoEstatusSolicitud _5001 = new CodigoEstatusSolicitud("5001",
             5001,
@@ -70,7 +71,7 @@ namespace ARSoftware.Cfdi.DescargaMasiva.Enumerations
             "El solicitante no tiene autorización de descarga de xml de los contribuyentes");
 
         /// <summary>
-        ///     Se han agotado las solicitudes de por vida
+        ///     5002 = Se han agotado las solicitudes de por vida
         /// </summary>
         public static readonly CodigoEstatusSolicitud _5002 = new CodigoEstatusSolicitud("5002",
             5002,
@@ -78,7 +79,7 @@ namespace ARSoftware.Cfdi.DescargaMasiva.Enumerations
             "Se ha alcanzado el límite de solicitudes, con el mismo criterio");
 
         /// <summary>
-        ///     Se han agotado las solicitudes de por vida
+        ///     5003 = Se han agotado las solicitudes de por vida
         /// </summary>
         public static readonly CodigoEstatusSolicitud _5003 = new CodigoEstatusSolicitud("5003",
             5003,
@@ -86,7 +87,7 @@ namespace ARSoftware.Cfdi.DescargaMasiva.Enumerations
             "Indica que en base a los parámetros de consulta se está superando el tope máximo de CFDI o Metadata, por solicitud de descarga masiva.");
 
         /// <summary>
-        ///     No se encontró la información
+        ///     5004 = No se encontró la información
         /// </summary>
         public static readonly CodigoEstatusSolicitud _5004 = new CodigoEstatusSolicitud("5004",
             5004,
@@ -94,7 +95,7 @@ namespace ARSoftware.Cfdi.DescargaMasiva.Enumerations
             "No se encontró la información del paquete solicitado");
 
         /// <summary>
-        ///     Ya se tiene una solicitud registrada
+        ///     5005 = Ya se tiene una solicitud registrada
         /// </summary>
         public static readonly CodigoEstatusSolicitud _5005 = new CodigoEstatusSolicitud("5005",
             5005,
@@ -102,12 +103,12 @@ namespace ARSoftware.Cfdi.DescargaMasiva.Enumerations
             "Ya existe una solicitud activa con los mismos criterios");
 
         /// <summary>
-        ///     Error interno en el proceso
+        ///     5006 = Error interno en el proceso
         /// </summary>
         public static readonly CodigoEstatusSolicitud _5006 = new CodigoEstatusSolicitud("5006", 5006, "Error interno en el proceso", "");
 
         /// <summary>
-        ///     No existe el paquete solicitado
+        ///     5007 = No existe el paquete solicitado
         /// </summary>
         public static readonly CodigoEstatusSolicitud _5007 = new CodigoEstatusSolicitud("5007",
             5007,
@@ -115,7 +116,7 @@ namespace ARSoftware.Cfdi.DescargaMasiva.Enumerations
             "Los paquetes solo tienen un periodo de vida de 72hrs");
 
         /// <summary>
-        ///     Máximo de descargas permitidas
+        ///     5008 = Máximo de descargas permitidas
         /// </summary>
         public static readonly CodigoEstatusSolicitud _5008 = new CodigoEstatusSolicitud("5008",
             5008,

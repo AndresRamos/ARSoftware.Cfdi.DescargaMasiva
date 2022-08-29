@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Xml;
 using ARSoftware.Cfdi.DescargaMasiva.Constants;
+using ARSoftware.Cfdi.DescargaMasiva.Enumerations;
 using ARSoftware.Cfdi.DescargaMasiva.Exceptions;
 using ARSoftware.Cfdi.DescargaMasiva.Helpers;
 using ARSoftware.Cfdi.DescargaMasiva.Interfaces;
@@ -114,7 +115,7 @@ namespace ARSoftware.Cfdi.DescargaMasiva.Services
 
             var packageIdsList = new List<string>();
 
-            if (downloadRequestStatusNumber == "3")
+            if (downloadRequestStatusNumber == EstadoSolicitud.Terminada.Value.ToString())
             {
                 XmlNodeList idsPaquetesElements = xmlDocument.GetElementsByTagName("IdsPaquetes");
 

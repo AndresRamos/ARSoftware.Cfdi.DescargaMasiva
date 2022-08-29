@@ -2,10 +2,14 @@
 
 namespace ARSoftware.Cfdi.DescargaMasiva.Enumerations
 {
+    /// <summary>
+    ///     Contiene el código de estado de la solicitud de descarga. Codigos recibidos desde la operación
+    ///     VerificaSolicitudDescarga
+    /// </summary>
     public sealed class CodigoEstadoSolicitud : SmartEnum<CodigoEstadoSolicitud>
     {
         /// <summary>
-        ///     Solicitud recibida con éxito
+        ///     5000 = Solicitud recibida con éxito
         /// </summary>
         public static readonly CodigoEstadoSolicitud _5000 = new CodigoEstadoSolicitud("5000",
             5000,
@@ -13,7 +17,7 @@ namespace ARSoftware.Cfdi.DescargaMasiva.Enumerations
             "Indica que la solicitud de descarga que se está verificando fue aceptada.");
 
         /// <summary>
-        ///     Se agotó las solicitudes de por vida
+        ///     5002 = Se agotó las solicitudes de por vida
         /// </summary>
         public static readonly CodigoEstadoSolicitud _5002 = new CodigoEstadoSolicitud("5002",
             5002,
@@ -21,7 +25,7 @@ namespace ARSoftware.Cfdi.DescargaMasiva.Enumerations
             "Para el caso de descarga de tipo CFDI, se tiene unlímite máximo para solicitudes con los mismos parámetros(Fecha Inicial, Fecha Final, RfcEmisor, RfcReceptor).");
 
         /// <summary>
-        ///     Tope máximo
+        ///     5003 = Tope máximo
         /// </summary>
         public static readonly CodigoEstadoSolicitud _5003 = new CodigoEstadoSolicitud("5003",
             5003,
@@ -29,7 +33,7 @@ namespace ARSoftware.Cfdi.DescargaMasiva.Enumerations
             "Indica que en base a los parámetros de consulta se está superando el tope máximo de CFDI o Metadata, por solicitud de descarga masiva.");
 
         /// <summary>
-        ///     No se encontró la información
+        ///     5004 = No se encontró la información
         /// </summary>
         public static readonly CodigoEstadoSolicitud _5004 = new CodigoEstadoSolicitud("5004",
             5004,
@@ -37,7 +41,7 @@ namespace ARSoftware.Cfdi.DescargaMasiva.Enumerations
             "Indica que la solicitud de descarga que se está verificando no generó paquetes por falta de información.");
 
         /// <summary>
-        ///     Solicitud duplicada
+        ///     5005 = Solicitud duplicada
         /// </summary>
         public static readonly CodigoEstadoSolicitud _5005 = new CodigoEstadoSolicitud("5005",
             5005,
@@ -45,7 +49,7 @@ namespace ARSoftware.Cfdi.DescargaMasiva.Enumerations
             "En caso de que exista una solicitud vigente con los mismos parámetros (Fecha Inicial, Fecha Final, RfcEmisor, RfcReceptor, TipoSolicitud), no se permitirá generar una nueva solicitud.");
 
         /// <summary>
-        ///     Error no Controlado
+        ///     404 = Error no Controlado
         /// </summary>
         public static readonly CodigoEstadoSolicitud _404 = new CodigoEstadoSolicitud("404",
             404,
