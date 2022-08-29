@@ -1,6 +1,7 @@
 # ARSoftware.Cfdi.DescargaMasiva
 
-![Nuget](https://img.shields.io/nuget/v/ARSoftware.Cfdi.DescargaMasiva?style=for-the-badge)
+[![Nuget](https://img.shields.io/nuget/v/ARSoftware.Cfdi.DescargaMasiva?style=for-the-badge)](https://www.nuget.org/packages/ARSoftware.Cfdi.DescargaMasiva) 
+[![GitHub Discussions](https://img.shields.io/github/discussions/AndresRamos/ARSoftware.Cfdi.DescargaMasiva?style=for-the-badge)](https://github.com/AndresRamos/ARSoftware.Cfdi.DescargaMasiva/discussions)
 
 Este proyecto implementa clases y servicios para descargar los CFDI de forma masiva utilizando el web service del SAT. Desarrollado en .Net Standard 2.0, este proyecto es  compatible para implementarse en desarrollos en .Net Framework y .Net Core.
 
@@ -11,11 +12,11 @@ Este proyecto te permite realizar las siguiente peticiones al web service:
 4. Peticion de Descarga
 
 ## Instalacion 
-Puedes instalarlo utilizando [Nuget](https://www.nuget.org/packages/ARSoftware.Cfdi.DescargaMasiva)
+Puedes instalarlo utilizando [Nuget](https://www.nuget.org/packages/ARSoftware.Cfdi.DescargaMasiva) Package Manager Console
 ```
 Install-Package ARSoftware.Cfdi.DescargaMasiva
 ```
-O utilizando el .Net CLI
+O utilizando el .NET CLI Console
 ```
 dotnet add package ARSoftware.Cfdi.DescargaMasiva
 ```
