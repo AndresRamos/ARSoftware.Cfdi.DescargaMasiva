@@ -48,6 +48,14 @@ namespace ARSoftware.Cfdi.DescargaMasiva.Enumerations
             "El certificado puede ser invalido por múltiples razones como son el tipo, codificación incorrecta, etc.");
 
         /// <summary>
+        ///     Error no Controlado
+        /// </summary>
+        public static readonly CodigoEstatusSolicitud _404 = new CodigoEstatusSolicitud("404",
+            404,
+            "Error no Controlado",
+            "Error genérico, en caso de presentarse realizar nuevamente la petición y si persiste el error levantar un RMA.");
+
+        /// <summary>
         ///     Solicitud de descarga recibida con éxito
         /// </summary>
         public static readonly CodigoEstatusSolicitud _5000 =
@@ -58,14 +66,24 @@ namespace ARSoftware.Cfdi.DescargaMasiva.Enumerations
         /// </summary>
         public static readonly CodigoEstatusSolicitud _5001 = new CodigoEstatusSolicitud("5001",
             5001,
-            "El solicitante no tiene autorización de descarga de xml de los contribuyentes",
-            "");
+            "Tercero no autorizado",
+            "El solicitante no tiene autorización de descarga de xml de los contribuyentes");
 
         /// <summary>
         ///     Se han agotado las solicitudes de por vida
         /// </summary>
-        public static readonly CodigoEstatusSolicitud _5002 =
-            new CodigoEstatusSolicitud("5002", 5002, "Se ha alcanzado el límite de solicitudes, con el mismo criterio", "");
+        public static readonly CodigoEstatusSolicitud _5002 = new CodigoEstatusSolicitud("5002",
+            5002,
+            "Se han agotado las solicitudes de por vida",
+            "Se ha alcanzado el límite de solicitudes, con el mismo criterio");
+
+        /// <summary>
+        ///     Se han agotado las solicitudes de por vida
+        /// </summary>
+        public static readonly CodigoEstatusSolicitud _5003 = new CodigoEstatusSolicitud("5003",
+            5003,
+            "Tope máximo",
+            "Indica que en base a los parámetros de consulta se está superando el tope máximo de CFDI o Metadata, por solicitud de descarga masiva.");
 
         /// <summary>
         ///     No se encontró la información
@@ -103,14 +121,6 @@ namespace ARSoftware.Cfdi.DescargaMasiva.Enumerations
             5008,
             "Máximo de descargas permitidas",
             "Un paquete solo puede descargarse un total de 2 veces, una vez agotadas, ya no se podrá volver a descargar");
-
-        /// <summary>
-        ///     Error no Controlado
-        /// </summary>
-        public static readonly CodigoEstatusSolicitud _404 = new CodigoEstatusSolicitud("404",
-            404,
-            "Error no Controlado",
-            "Error genérico, en caso de presentarse realizar nuevamente la petición y si persiste el error levantar un RMA.");
 
         private CodigoEstatusSolicitud(string name, int value, string mensaje, string observaciones) : base(name, value)
         {
