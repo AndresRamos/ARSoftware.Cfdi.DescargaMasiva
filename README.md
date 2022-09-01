@@ -6,10 +6,10 @@
 Este proyecto implementa clases y servicios para descargar los CFDI de forma masiva utilizando el web service del SAT. Desarrollado en .Net Standard 2.0, este proyecto es  compatible para implementarse en desarrollos en .Net Framework y .Net Core.
 
 Este proyecto te permite realizar las siguiente peticiones al web service:
-1. Peticion de Autenticacion
-2. Peticion de Solicitud
-3. Peticion de Verificacion
-4. Peticion de Descarga
+1. [Peticion de Autenticacion](https://github.com/AndresRamos/ARSoftware.Cfdi.DescargaMasiva/wiki/Autenticacion)
+2. [Peticion de Solicitud](https://github.com/AndresRamos/ARSoftware.Cfdi.DescargaMasiva/wiki/Solicitud)
+3. [Peticion de Verificacion](https://github.com/AndresRamos/ARSoftware.Cfdi.DescargaMasiva/wiki/Verificacion)
+4. [Peticion de Descarga](https://github.com/AndresRamos/ARSoftware.Cfdi.DescargaMasiva/wiki/Descarga)
 
 ## Instalacion 
 Puedes instalarlo utilizando [Nuget](https://www.nuget.org/packages/ARSoftware.Cfdi.DescargaMasiva) Package Manager Console
