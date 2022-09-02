@@ -12,6 +12,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\ARSoftware.Cfdi.DescargaMasiva\ARSoftware.Cfdi.DescargaMasiva.csproj" />
+    <ProjectReference Include="..\..\src\ARSoftware.Cfdi.DescargaMasiva\ARSoftware.Cfdi.DescargaMasiva.csproj" />
   </ItemGroup>
 </Project>
