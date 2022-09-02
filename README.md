@@ -22,83 +22,152 @@ dotnet add package ARSoftware.Cfdi.DescargaMasiva
 ```
 
 ## Ejemplo
+El siguiente ejemplo muestra como utilizar los servicios para hacer una solicitud de descarga de los CFDI recibidos el dia de hoy
 ```csharp
-public class Program
-{
-    private static readonly CancellationTokenSource CancellationTokenSource = new();
-
-    public static async Task Main(string[] args)
+IHost host = Host.CreateDefaultBuilder(args)
+    .ConfigureServices(services =>
     {
-        CancellationToken cancellationToken = CancellationTokenSource.Token;
+        // Registrar servicios de descarga masiva con el contenedor de servicios
+        services.AddCfdiDescargaMasivaServices();
+    })
+    .Build();
 
-        IHost host = Host.CreateDefaultBuilder(args)
-            .ConfigureServices(services =>
-            {
-                // Registrar servicios de descarga masiva
-                services.AddCfdiDescargaMasivaServices();
-            })
-            .Build();
+CancellationTokenSource cancellationTokenSource = new();
+CancellationToken cancellationToken = cancellationTokenSource.Token;
 
-        await host.StartAsync(cancellationToken);
+await host.StartAsync(cancellationToken);
 
-        var certificadoPfx = new byte[0];
-        var certificadoPassword = "";
-        DateTime fechaInicio = DateTime.Today;
-        DateTime fechaFin = DateTime.Today;
-        TipoSolicitud? tipoSolicitud = TipoSolicitud.Cfdi;
-        var rfcEmisor = "";
-        var rfcReceptores = new List<string> { "" };
-        var rfcSolicitante = "";
-        var rutaDescarga = @"C:\CFDIS";
+var logger = host.Services.GetRequiredService<ILogger<Program>>();
 
-        X509Certificate2? certificadoSat = X509Certificate2Helper.GetCertificate(certificadoPfx, certificadoPassword);
+logger.LogInformation("Iniciando ejemplo de como utilizar los servicios para descargar los CFDIs recibidos del dia de hoy.");
 
-        // Autenticacion
-        var autenticacionService = host.Services.GetRequiredService<IAutenticacionService>();
-        var autenticacionRequest = AutenticacionRequest.CreateInstance();
-        AutenticacionResult? autenticacionResult =
-            await autenticacionService.SendSoapRequestAsync(autenticacionRequest, certificadoSat, cancellationToken);
+// Parametros de ejemplo
+var rutaCertificadoPfx = @"C:\DescargaMasiva\certificado.pfx";
+byte[] certificadoPfx = await File.ReadAllBytesAsync(rutaCertificadoPfx, cancellationToken);
+var certificadoPassword = "12345678a";
+DateTime fechaInicio = DateTime.Today;
+DateTime fechaFin = DateTime.Today;
+TipoSolicitud? tipoSolicitud = TipoSolicitud.Cfdi;
+var rfcEmisor = "";
+var rfcReceptores = new List<string> { "AAA010101AAAA" };
+var rfcSolicitante = "AAA010101AAAA";
+var rutaDescarga = @"C:\DescargaMasiva\CFDIs";
 
-        // Solicitud
-        var solicitudService = host.Services.GetRequiredService<ISolicitudService>();
-        var solicitudRequest = SolicitudRequest.CreateInstance(fechaInicio,
-            fechaFin,
-            tipoSolicitud,
-            rfcEmisor,
-            rfcReceptores,
-            rfcSolicitante,
-            autenticacionResult.AccessToken);
-        SolicitudResult? solicitudResult = await solicitudService.SendSoapRequestAsync(solicitudRequest, certificadoSat, cancellationToken);
+logger.LogInformation("Creando el certificado SAT con el certificado PFX y contrasena.");
+X509Certificate2 certificadoSat = X509Certificate2Helper.GetCertificate(certificadoPfx, certificadoPassword);
 
-        // Verificacion
-        var verificaSolicitudService = host.Services.GetRequiredService<IVerificacionService>();
-        var verificacionRequest =
-            VerificacionRequest.CreateInstance(solicitudResult.RequestId, rfcSolicitante, autenticacionResult.AccessToken);
-        VerificacionResult? verificacionResult = await verificaSolicitudService.SendSoapRequestAsync(verificacionRequest,
-            certificadoSat,
-            cancellationToken);
+// Autenticacion
+logger.LogInformation("Buscando el servicio de autenticacion en el contenedor de servicios (Dependency Injection).");
+var autenticacionService = host.Services.GetRequiredService<IAutenticacionService>();
 
-        // Descarga
-        var descargarSolicitudService = host.Services.GetRequiredService<IDescargaService>();
-        foreach (string? idsPaquete in verificacionResult.PackageIds)
-        {
-            var descargaRequest = DescargaRequest.CreateInstace(idsPaquete, rfcSolicitante, autenticacionResult.AccessToken);
-            DescargaResult? descargaResult = await descargarSolicitudService.SendSoapRequestAsync(descargaRequest,
-                certificadoSat,
-                cancellationToken);
+logger.LogInformation("Creando solicitud de autenticacion.");
+var autenticacionRequest = AutenticacionRequest.CreateInstance();
 
-            string fileName = Path.Combine(rutaDescarga, $"{idsPaquete}.zip");
-            byte[] paqueteContenido = Convert.FromBase64String(descargaResult.Package);
+logger.LogInformation("Enviando solicitud de autenticacion.");
+AutenticacionResult autenticacionResult =
+    await autenticacionService.SendSoapRequestAsync(autenticacionRequest, certificadoSat, cancellationToken);
 
-            using (FileStream fileStream = File.Create(fileName, paqueteContenido.Length))
-            {
-                await fileStream.WriteAsync(paqueteContenido, 0, paqueteContenido.Length, cancellationToken);
-            }
-        }
-
-        await host.StopAsync(cancellationToken);
-    }
+if (!autenticacionResult.AccessToken.IsValid)
+{
+    logger.LogError("La solicitud de autenticacion no fue exitosa. FaultCode:{0} FaultString:{1}",
+        autenticacionResult.FaultCode,
+        autenticacionResult.FaultString);
+    throw new Exception();
 }
+
+logger.LogInformation("La solicitud de autenticacion fue exitosa. AccessToken:{0}", autenticacionResult.AccessToken.DecodedValue);
+
+// Solicitud
+logger.LogInformation("Buscando el servicio de solicitud de descarga en el contenedor de servicios (Dependency Injection).");
+var solicitudService = host.Services.GetRequiredService<ISolicitudService>();
+
+logger.LogInformation("Creando solicitud de solicitud de descarga.");
+var solicitudRequest = SolicitudRequest.CreateInstance(fechaInicio,
+    fechaFin,
+    tipoSolicitud,
+    rfcEmisor,
+    rfcReceptores,
+    rfcSolicitante,
+    autenticacionResult.AccessToken);
+
+logger.LogInformation("Enviando solicitud de solicitud de descarga.");
+SolicitudResult solicitudResult = await solicitudService.SendSoapRequestAsync(solicitudRequest, certificadoSat, cancellationToken);
+
+if (string.IsNullOrEmpty(solicitudResult.RequestId))
+{
+    logger.LogError("La solicitud de solicitud de descarga no fue exitosa. RequestStatusCode:{0} RequestStatusMessage:{1}",
+        solicitudResult.RequestStatusCode,
+        solicitudResult.RequestStatusMessage);
+    throw new Exception();
+}
+
+logger.LogInformation("La solicitud de solicitud de descarga fue exitosa. RequestId:{0}", solicitudResult.RequestId);
+
+// Verificacion
+logger.LogInformation("Buscando el servicio de verificacion en el contenedor de servicios (Dependency Injection).");
+var verificaSolicitudService = host.Services.GetRequiredService<IVerificacionService>();
+
+logger.LogInformation("Creando solicitud de verificacion.");
+var verificacionRequest = VerificacionRequest.CreateInstance(solicitudResult.RequestId, rfcSolicitante, autenticacionResult.AccessToken);
+
+logger.LogInformation("Enviando solicitud de verificacion.");
+VerificacionResult verificacionResult = await verificaSolicitudService.SendSoapRequestAsync(verificacionRequest,
+    certificadoSat,
+    cancellationToken);
+
+if (verificacionResult.DownloadRequestStatusNumber != EstadoSolicitud.Terminada.Value.ToString())
+{
+    logger.LogError(
+        "La solicitud de verificacion no fue exitosa. DownloadRequestStatusNumber:{0} RequestStatusCode:{1} RequestStatusMessage:{2}",
+        verificacionResult.DownloadRequestStatusNumber,
+        verificacionResult.RequestStatusCode,
+        verificacionResult.RequestStatusMessage);
+
+    if (verificacionResult.DownloadRequestStatusNumber == EstadoSolicitud.Aceptada.Value.ToString())
+    {
+        logger.LogInformation(
+            "Es estado de la solicitud es Aceptada. Mandar otra solicitud de verificaion mas tarde para que el servicio web pueda procesar la solicitud.");
+    }
+    else if (verificacionResult.DownloadRequestStatusNumber == EstadoSolicitud.EnProceso.Value.ToString())
+    {
+        logger.LogInformation(
+            "Es estado de la solicitud es En Proceso. Mandar otra solicitud de verificaion mas tarde para que el servicio web pueda procesar la solicitud.");
+    }
+
+    throw new Exception();
+}
+
+logger.LogInformation("La solicitud de verificacion fue exitosa.");
+foreach (string idsPaquete in verificacionResult.PackageIds)
+{
+    logger.LogInformation("PackageId:{0}", idsPaquete);
+}
+
+// Descarga
+logger.LogInformation("Buscando el servicio de verificacion en el contenedor de servicios (Dependency Injection).");
+var descargarSolicitudService = host.Services.GetRequiredService<IDescargaService>();
+
+foreach (string? idsPaquete in verificacionResult.PackageIds)
+{
+    logger.LogInformation("Creando solicitud de descarga.");
+    var descargaRequest = DescargaRequest.CreateInstace(idsPaquete, rfcSolicitante, autenticacionResult.AccessToken);
+
+    logger.LogInformation("Enviando solicitud de descarga.");
+    DescargaResult? descargaResult = await descargarSolicitudService.SendSoapRequestAsync(descargaRequest,
+        certificadoSat,
+        cancellationToken);
+
+    string fileName = Path.Combine(rutaDescarga, $"{idsPaquete}.zip");
+    byte[] paqueteContenido = Convert.FromBase64String(descargaResult.Package);
+
+    logger.LogInformation("Guardando paquete descargado en un archivo .zip en la ruta de descarga.");
+    using FileStream fileStream = File.Create(fileName, paqueteContenido.Length);
+    await fileStream.WriteAsync(paqueteContenido, 0, paqueteContenido.Length, cancellationToken);
+}
+
+await host.StopAsync(cancellationToken);
+
+logger.LogInformation("Proceso terminado.");
 ```
 
 ## Aplicacion De Descarga Masiva
