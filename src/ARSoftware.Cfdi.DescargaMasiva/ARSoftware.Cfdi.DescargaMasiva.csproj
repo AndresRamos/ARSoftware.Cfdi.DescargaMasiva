@@ -3,31 +3,38 @@
 	<PropertyGroup>
 		<TargetFramework>netstandard2.0</TargetFramework>
 		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-		<Version>2.0.0</Version>
+		<Version>2.1.0-beta1</Version>
 		<Authors>AR Software</Authors>
 		<Product>ARSoftware Cfdi Descarga Masiva</Product>
 		<Description>Implementacion de clases y servicios para descargar los CFDI de forma masiva utilizando el web service del SAT.</Description>
-		<Copyright>Copyright © AR Software 2022</Copyright>
+		<Copyright>Copyright © AR Software 2023</Copyright>
 		<PackageProjectUrl>https://github.com/AndresRamos/ARSoftware.Cfdi.DescargaMasiva</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/AndresRamos/ARSoftware.Cfdi.DescargaMasiva</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>
 		<PackageTags>SAT CFDI Descarga Masiva Web Service</PackageTags>
-		<PackageReleaseNotes>Se implementaron nuevos cambios del web service que incluye nuevos nodos y atributos en las peticiones.
-Se actualizo el cliente para implementar HttpClient en lugar de WebRequest.
-Se modificaron los nombres de varias propiedades para consolidar el idioma en Ingles.
-Se agrego documentacion a los servicios y modelos.
-Se implemento el uso de Dependency Injection.</PackageReleaseNotes>
+		<PackageReleaseNotes>
+			- Se corrige y modifica el XML generado para mandar consultas por UUID
+			- Se agrega un metodo para crear solicitud de consulta por UUID
+		</PackageReleaseNotes>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<PackageIcon>AR_LOGO03.jpg</PackageIcon>
 		<GenerateDocumentationFile>True</GenerateDocumentationFile>
 	</PropertyGroup>
-	
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+		<NoWarn>1701;1702;1591</NoWarn>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+		<NoWarn>1701;1702;1591</NoWarn>
+	</PropertyGroup>
+
 	<ItemGroup>
 		<PackageReference Include="Ardalis.SmartEnum" Version="2.1.0" />
 		<PackageReference Include="Microsoft.Extensions.Http" Version="6.0.0" />
 		<PackageReference Include="System.Security.Cryptography.Xml" Version="6.0.1" />
 	</ItemGroup>
-	
+
 	<ItemGroup>
 		<None Include="Images\AR_LOGO03.jpg" Pack="true" PackagePath="\" />
 	</ItemGroup>

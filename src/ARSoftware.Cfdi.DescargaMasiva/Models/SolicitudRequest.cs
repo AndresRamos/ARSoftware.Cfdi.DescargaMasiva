@@ -121,34 +121,7 @@ namespace ARSoftware.Cfdi.DescargaMasiva.Models
         public bool HasDocumentStatus => DocumentStatus != EstadoComprobante.Null;
         public bool HasComplement => !string.IsNullOrWhiteSpace(Complement);
         public bool HasUuid => !string.IsNullOrWhiteSpace(Uuid);
-
-        public static SolicitudRequest CreateInstance(DateTime startDate,
-                                                      DateTime endDete,
-                                                      TipoSolicitud requestType,
-                                                      string senderRfc,
-                                                      IEnumerable<string> recipientsRfcs,
-                                                      string requestingRfc,
-                                                      AccessToken accessToken)
-        {
-            List<string> recipients = recipientsRfcs.ToList();
-            if (recipients.Any() && recipients.Count > 5)
-            {
-                throw new ArgumentOutOfRangeException(nameof(RecipientsRfcs), "There can only be a maximum of 5 recipient RFC.");
-            }
-
-            return new SolicitudRequest(startDate,
-                endDete,
-                requestType,
-                senderRfc,
-                recipients,
-                requestingRfc,
-                accessToken,
-                TipoComprobante.Null,
-                EstadoComprobante.Null,
-                string.Empty,
-                string.Empty,
-                string.Empty);
-        }
+        public bool HasThirdPartyRfc => !string.IsNullOrWhiteSpace(ThirdPartyRfc);
 
         public static SolicitudRequest CreateInstance(DateTime startDate,
                                                       DateTime endDete,
@@ -165,9 +138,7 @@ namespace ARSoftware.Cfdi.DescargaMasiva.Models
         {
             List<string> recipients = recipientsRfcs.ToList();
             if (recipients.Any() && recipients.Count > 5)
-            {
                 throw new ArgumentOutOfRangeException(nameof(RecipientsRfcs), "There can only be a maximum of 5 recipient RFC.");
-            }
 
             return new SolicitudRequest(startDate,
                 endDete,
@@ -180,6 +151,48 @@ namespace ARSoftware.Cfdi.DescargaMasiva.Models
                 documentStatus,
                 thirdPartyRfc,
                 complement,
+                uuid);
+        }
+
+        public static SolicitudRequest CreateInstance(DateTime startDate,
+                                                      DateTime endDete,
+                                                      TipoSolicitud requestType,
+                                                      string senderRfc,
+                                                      IEnumerable<string> recipientsRfcs,
+                                                      string requestingRfc,
+                                                      AccessToken accessToken)
+        {
+            List<string> recipients = recipientsRfcs.ToList();
+            if (recipients.Any() && recipients.Count > 5)
+                throw new ArgumentOutOfRangeException(nameof(RecipientsRfcs), "There can only be a maximum of 5 recipient RFC.");
+
+            return new SolicitudRequest(startDate,
+                endDete,
+                requestType,
+                senderRfc,
+                recipients,
+                requestingRfc,
+                accessToken,
+                TipoComprobante.Null,
+                EstadoComprobante.Null,
+                string.Empty,
+                string.Empty,
+                string.Empty);
+        }
+
+        public static SolicitudRequest CreateInstance(string uuid, string requestingRfc, AccessToken accessToken)
+        {
+            return new SolicitudRequest(DateTime.MinValue,
+                DateTime.MinValue,
+                TipoSolicitud.Cfdi,
+                "",
+                Enumerable.Empty<string>(),
+                requestingRfc,
+                accessToken,
+                TipoComprobante.Null,
+                EstadoComprobante.Null,
+                string.Empty,
+                string.Empty,
                 uuid);
         }
     }

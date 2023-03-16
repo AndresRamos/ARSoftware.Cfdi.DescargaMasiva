@@ -49,50 +49,57 @@ namespace ARSoftware.Cfdi.DescargaMasiva.Services
             XmlElement solicitudElement = xmlDocument.CreateElement(CfdiDescargaMasivaNamespaces.DesPrefix,
                 "solicitud",
                 CfdiDescargaMasivaNamespaces.DesNamespaceUrl);
-            solicitudElement.SetAttribute("FechaInicial", solicitudRequest.StartDate.ToSoapStartDateString());
-            solicitudElement.SetAttribute("FechaFinal", solicitudRequest.EndDate.ToSoapEndDateString());
-            solicitudElement.SetAttribute("RfcEmisor", solicitudRequest.SenderRfc);
+
+            if (!solicitudRequest.HasUuid)
+                solicitudElement.SetAttribute("FechaInicial", solicitudRequest.StartDate.ToSoapStartDateString());
+
+            if (!solicitudRequest.HasUuid)
+                solicitudElement.SetAttribute("FechaFinal", solicitudRequest.EndDate.ToSoapEndDateString());
+
+            if (!solicitudRequest.HasUuid)
+                solicitudElement.SetAttribute("RfcEmisor", solicitudRequest.SenderRfc);
+
             solicitudElement.SetAttribute("RfcSolicitante", solicitudRequest.RequestingRfc);
+
             solicitudElement.SetAttribute("TipoSolicitud", solicitudRequest.RequestType.Name);
-            solicitudElement.SetAttribute("RfcACuentaTerceros", solicitudRequest.ThirdPartyRfc);
+
+            // Optional
+            if (solicitudRequest.HasThirdPartyRfc)
+                solicitudElement.SetAttribute("RfcACuentaTerceros", solicitudRequest.ThirdPartyRfc);
 
             // Optional
             if (solicitudRequest.HasDocumentType)
-            {
                 solicitudElement.SetAttribute("TipoComprobante", solicitudRequest.DocumentType.Value);
-            }
 
             // Optional
             if (solicitudRequest.HasDocumentStatus)
-            {
                 solicitudElement.SetAttribute("EstadoComprobante", solicitudRequest.DocumentStatus.Value.ToString());
-            }
 
-            // Optional
+            //Optional
             if (solicitudRequest.HasComplement)
-            {
                 solicitudElement.SetAttribute("Complemento", solicitudRequest.Complement);
-            }
 
             // Optional
             if (solicitudRequest.HasUuid)
-            {
-                solicitudElement.SetAttribute("UUID", solicitudRequest.Uuid);
-            }
+                solicitudElement.SetAttribute("Folio", solicitudRequest.Uuid);
 
-            XmlElement rfcReceptores = xmlDocument.CreateElement(CfdiDescargaMasivaNamespaces.DesPrefix,
-                "RfcReceptores",
-                CfdiDescargaMasivaNamespaces.DesNamespaceUrl);
-            foreach (string item in solicitudRequest.RecipientsRfcs)
+            if (!solicitudRequest.HasUuid)
             {
-                XmlElement rfcReceptorElement = xmlDocument.CreateElement(CfdiDescargaMasivaNamespaces.DesPrefix,
-                    "RfcReceptor",
+                XmlElement rfcReceptores = xmlDocument.CreateElement(CfdiDescargaMasivaNamespaces.DesPrefix,
+                    "RfcReceptores",
                     CfdiDescargaMasivaNamespaces.DesNamespaceUrl);
-                rfcReceptorElement.InnerText = item;
-                rfcReceptores.AppendChild(rfcReceptorElement);
+                foreach (string item in solicitudRequest.RecipientsRfcs)
+                {
+                    XmlElement rfcReceptorElement = xmlDocument.CreateElement(CfdiDescargaMasivaNamespaces.DesPrefix,
+                        "RfcReceptor",
+                        CfdiDescargaMasivaNamespaces.DesNamespaceUrl);
+                    rfcReceptorElement.InnerText = item;
+                    rfcReceptores.AppendChild(rfcReceptorElement);
+                }
+
+                solicitudElement.AppendChild(rfcReceptores);
             }
 
-            solicitudElement.AppendChild(rfcReceptores);
             XmlElement signatureElement = SignedXmlHelper.SignRequest(solicitudElement, certificate);
             solicitudElement.AppendChild(signatureElement);
             solicitaDescargaElement.AppendChild(solicitudElement);
@@ -133,16 +140,12 @@ namespace ARSoftware.Cfdi.DescargaMasiva.Services
 
             XmlNode element = xmlDocument.GetElementsByTagName("SolicitaDescargaResult")[0];
             if (element is null)
-            {
                 throw new InvalidResponseContentException("Element SolicitaDescargaResult is missing in response.",
                     soapRequestResult.ResponseContent);
-            }
 
             if (element.Attributes is null)
-            {
                 throw new InvalidResponseContentException("Attributes property of Element SolicitaDescargaResult is null.",
                     soapRequestResult.ResponseContent);
-            }
 
             string requestId = element.Attributes.GetNamedItem("IdSolicitud")?.Value ?? string.Empty;
             string requestStatusCode = element.Attributes.GetNamedItem("CodEstatus")?.Value ?? string.Empty;

@@ -23,16 +23,17 @@ var logger = host.Services.GetRequiredService<ILogger<Program>>();
 logger.LogInformation("Iniciando ejemplo de como utilizar los servicios para descargar los CFDIs recibidos del dia de hoy.");
 
 // Parametros de ejemplo
-var rutaCertificadoPfx = @"C:\DescargaMasiva\certificado.pfx";
+var rutaCertificadoPfx = @"C:\AR Software\CFDI Descarga Masiva\certificado.pfx";
 byte[] certificadoPfx = await File.ReadAllBytesAsync(rutaCertificadoPfx, cancellationToken);
 var certificadoPassword = "12345678a";
 DateTime fechaInicio = DateTime.Today;
 DateTime fechaFin = DateTime.Today;
 TipoSolicitud? tipoSolicitud = TipoSolicitud.Cfdi;
 var rfcEmisor = "";
-var rfcReceptores = new List<string> { "AAA010101AAAA" };
-var rfcSolicitante = "AAA010101AAAA";
-var rutaDescarga = @"C:\DescargaMasiva\CFDIs";
+var rfcReceptores = new List<string> { "AAA010101AAA" };
+var rfcSolicitante = "AAA010101AAA";
+var uuid = "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX";
+var rutaDescarga = @"C:\AR Software\CFDI Descarga Masiva\CFDIs";
 
 logger.LogInformation("Creando el certificado SAT con el certificado PFX y contrasena.");
 X509Certificate2 certificadoSat = X509Certificate2Helper.GetCertificate(certificadoPfx, certificadoPassword);
@@ -63,16 +64,18 @@ logger.LogInformation("Buscando el servicio de solicitud de descarga en el conte
 var solicitudService = host.Services.GetRequiredService<ISolicitudService>();
 
 logger.LogInformation("Creando solicitud de solicitud de descarga.");
-var solicitudRequest = SolicitudRequest.CreateInstance(fechaInicio,
-    fechaFin,
-    tipoSolicitud,
-    rfcEmisor,
-    rfcReceptores,
-    rfcSolicitante,
-    autenticacionResult.AccessToken);
+//var solicitudPorRangoFecha = SolicitudRequest.CreateInstance(fechaInicio,
+//    fechaFin,
+//    tipoSolicitud,
+//    rfcEmisor,
+//    rfcReceptores,
+//    rfcSolicitante,
+//    autenticacionResult.AccessToken);
+
+var solicitudPorUuid = SolicitudRequest.CreateInstance(uuid, rfcSolicitante, autenticacionResult.AccessToken);
 
 logger.LogInformation("Enviando solicitud de solicitud de descarga.");
-SolicitudResult solicitudResult = await solicitudService.SendSoapRequestAsync(solicitudRequest, certificadoSat, cancellationToken);
+SolicitudResult solicitudResult = await solicitudService.SendSoapRequestAsync(solicitudPorUuid, certificadoSat, cancellationToken);
 
 if (string.IsNullOrEmpty(solicitudResult.RequestId))
 {
@@ -105,24 +108,18 @@ if (verificacionResult.DownloadRequestStatusNumber != EstadoSolicitud.Terminada.
         verificacionResult.RequestStatusMessage);
 
     if (verificacionResult.DownloadRequestStatusNumber == EstadoSolicitud.Aceptada.Value.ToString())
-    {
         logger.LogInformation(
             "Es estado de la solicitud es Aceptada. Mandar otra solicitud de verificaion mas tarde para que el servicio web pueda procesar la solicitud.");
-    }
     else if (verificacionResult.DownloadRequestStatusNumber == EstadoSolicitud.EnProceso.Value.ToString())
-    {
         logger.LogInformation(
             "Es estado de la solicitud es En Proceso. Mandar otra solicitud de verificaion mas tarde para que el servicio web pueda procesar la solicitud.");
-    }
 
     throw new Exception();
 }
 
 logger.LogInformation("La solicitud de verificacion fue exitosa.");
 foreach (string idsPaquete in verificacionResult.PackageIds)
-{
     logger.LogInformation("PackageId:{0}", idsPaquete);
-}
 
 // Descarga
 logger.LogInformation("Buscando el servicio de verificacion en el contenedor de servicios (Dependency Injection).");
