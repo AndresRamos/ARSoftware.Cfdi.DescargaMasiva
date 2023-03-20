@@ -28,7 +28,7 @@ byte[] certificadoPfx = await File.ReadAllBytesAsync(rutaCertificadoPfx, cancell
 var certificadoPassword = "12345678a";
 DateTime fechaInicio = DateTime.Today;
 DateTime fechaFin = DateTime.Today;
-TipoSolicitud? tipoSolicitud = TipoSolicitud.Cfdi;
+TipoSolicitud tipoSolicitud = TipoSolicitud.Cfdi;
 var rfcEmisor = "";
 var rfcReceptores = new List<string> { "AAA010101AAA" };
 var rfcSolicitante = "AAA010101AAA";
@@ -64,14 +64,16 @@ logger.LogInformation("Buscando el servicio de solicitud de descarga en el conte
 var solicitudService = host.Services.GetRequiredService<ISolicitudService>();
 
 logger.LogInformation("Creando solicitud de solicitud de descarga.");
-//var solicitudPorRangoFecha = SolicitudRequest.CreateInstance(fechaInicio,
-//    fechaFin,
-//    tipoSolicitud,
-//    rfcEmisor,
-//    rfcReceptores,
-//    rfcSolicitante,
-//    autenticacionResult.AccessToken);
+// Solicitud por rango de fecha
+var solicitudPorRangoFecha = SolicitudRequest.CreateInstance(fechaInicio,
+    fechaFin,
+    tipoSolicitud,
+    rfcEmisor,
+    rfcReceptores,
+    rfcSolicitante,
+    autenticacionResult.AccessToken);
 
+// solicitud por UUID
 var solicitudPorUuid = SolicitudRequest.CreateInstance(uuid, rfcSolicitante, autenticacionResult.AccessToken);
 
 logger.LogInformation("Enviando solicitud de solicitud de descarga.");
@@ -131,7 +133,7 @@ foreach (string? idsPaquete in verificacionResult.PackageIds)
     var descargaRequest = DescargaRequest.CreateInstace(idsPaquete, rfcSolicitante, autenticacionResult.AccessToken);
 
     logger.LogInformation("Enviando solicitud de descarga.");
-    DescargaResult? descargaResult = await descargarSolicitudService.SendSoapRequestAsync(descargaRequest,
+    DescargaResult descargaResult = await descargarSolicitudService.SendSoapRequestAsync(descargaRequest,
         certificadoSat,
         cancellationToken);
 
