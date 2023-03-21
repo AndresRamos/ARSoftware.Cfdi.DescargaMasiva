@@ -13,15 +13,14 @@
 		<RepositoryUrl>https://github.com/AndresRamos/ARSoftware.Cfdi.DescargaMasiva</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>
 		<PackageTags>SAT CFDI Descarga Masiva Web Service</PackageTags>
-		<PackageReleaseNotes>
-			- Se corrige y modifica el XML generado para mandar consultas por UUID
-			- Se agrega un metodo para crear solicitud de consulta por UUID
-			- Se actualizo a la plataforma .NET 7
-		</PackageReleaseNotes>
+		<PackageReleaseNotes>- Se corrige y modifica el XML generado para mandar consultas por UUID
+- Se agrega un metodo para crear una solicitud de consulta por UUID
+- Se actualiza el TargetFramework a .NET 7.0</PackageReleaseNotes>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<PackageIcon>AR_LOGO03.jpg</PackageIcon>
 		<GenerateDocumentationFile>True</GenerateDocumentationFile>
 		<Nullable>enable</Nullable>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -39,6 +38,10 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<None Include="..\..\README.md">
+		  <Pack>True</Pack>
+		  <PackagePath>\</PackagePath>
+		</None>
 		<None Include="Images\AR_LOGO03.jpg" Pack="true" PackagePath="\" />
 	</ItemGroup>
 
