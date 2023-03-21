@@ -4,7 +4,7 @@
 		<TargetFramework>net7.0</TargetFramework>
 		<ImplicitUsings>disable</ImplicitUsings>
 		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-		<Version>2.1.0-beta1</Version>
+		<Version>3.0.0-beta1</Version>
 		<Authors>AR Software</Authors>
 		<Product>ARSoftware Cfdi Descarga Masiva</Product>
 		<Description>Implementacion de clases y servicios para descargar los CFDI de forma masiva utilizando el web service del SAT.</Description>
@@ -16,6 +16,7 @@
 		<PackageReleaseNotes>
 			- Se corrige y modifica el XML generado para mandar consultas por UUID
 			- Se agrega un metodo para crear solicitud de consulta por UUID
+			- Se actualizo a la plataforma .NET 7
 		</PackageReleaseNotes>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<PackageIcon>AR_LOGO03.jpg</PackageIcon>
