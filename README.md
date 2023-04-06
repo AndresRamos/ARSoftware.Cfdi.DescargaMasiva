@@ -3,7 +3,7 @@
 [![Nuget](https://img.shields.io/nuget/v/ARSoftware.Cfdi.DescargaMasiva?style=for-the-badge)](https://www.nuget.org/packages/ARSoftware.Cfdi.DescargaMasiva) 
 [![GitHub Discussions](https://img.shields.io/github/discussions/AndresRamos/ARSoftware.Cfdi.DescargaMasiva?style=for-the-badge)](https://github.com/AndresRamos/ARSoftware.Cfdi.DescargaMasiva/discussions)
 
-Este proyecto es una libreria desarrollada en .NET 7.0 que expone clases y servicios para descargar los CFDI de forma masiva utilizando el web service del SAT.
+Este proyecto es una libreria que expone clases y servicios para descargar los CFDI de forma masiva utilizando el web service del SAT.
 
 Este proyecto te permite realizar las siguiente peticiones al web service:
 1. [Peticion de Autenticacion](https://github.com/AndresRamos/ARSoftware.Cfdi.DescargaMasiva/wiki/Autenticacion)
