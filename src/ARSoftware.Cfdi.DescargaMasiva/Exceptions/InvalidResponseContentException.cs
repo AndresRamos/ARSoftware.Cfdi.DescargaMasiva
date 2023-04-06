@@ -1,15 +1,17 @@
 ﻿using System;
 
-namespace ARSoftware.Cfdi.DescargaMasiva.Exceptions;
-
-public sealed class InvalidResponseContentException : Exception
+namespace ARSoftware.Cfdi.DescargaMasiva.Exceptions
 {
-    private static readonly string DefaultMessage = "Response content is not in a valid format.";
-
-    public InvalidResponseContentException(string message, string content) : base($"{DefaultMessage} Message: {message} Content: {content}")
+    public sealed class InvalidResponseContentException : Exception
     {
-        Content = content;
-    }
+        private static readonly string DefaultMessage = "Response content is not in a valid format.";
 
-    public string Content { get; }
+        public InvalidResponseContentException(string message, string content) : base(
+            $"{DefaultMessage} Message: {message} Content: {content}")
+        {
+            Content = content;
+        }
+
+        public string Content { get; }
+    }
 }

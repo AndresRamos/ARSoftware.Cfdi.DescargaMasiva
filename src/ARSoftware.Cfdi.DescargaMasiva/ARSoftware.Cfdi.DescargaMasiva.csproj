@@ -1,10 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFramework>net7.0</TargetFramework>
+		<TargetFrameworks>netstandard2.0;net6.0;net7.0</TargetFrameworks>
 		<ImplicitUsings>disable</ImplicitUsings>
 		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-		<Version>3.0.0-beta1</Version>
+		<Version>3.0.0</Version>
 		<Authors>AR Software</Authors>
 		<Product>ARSoftware Cfdi Descarga Masiva</Product>
 		<Description>Implementacion de clases y servicios para descargar los CFDI de forma masiva utilizando el web service del SAT.</Description>
@@ -13,14 +13,13 @@
 		<RepositoryUrl>https://github.com/AndresRamos/ARSoftware.Cfdi.DescargaMasiva</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>
 		<PackageTags>SAT CFDI Descarga Masiva Web Service</PackageTags>
-		<PackageReleaseNotes>- Se corrige y modifica el XML generado para mandar consultas por UUID
-- Se agrega un metodo para crear una solicitud de consulta por UUID
-- Se actualiza el TargetFramework a .NET 7.0</PackageReleaseNotes>
+		<PackageReleaseNotes>https://github.com/AndresRamos/ARSoftware.Cfdi.DescargaMasiva/releases</PackageReleaseNotes>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<PackageIcon>AR_LOGO03.jpg</PackageIcon>
 		<GenerateDocumentationFile>True</GenerateDocumentationFile>
-		<Nullable>enable</Nullable>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
+		<IncludeSymbols>True</IncludeSymbols>
+		<SymbolPackageFormat>snupkg</SymbolPackageFormat>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -32,15 +31,15 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Ardalis.SmartEnum" Version="7.0.0" />
-		<PackageReference Include="Microsoft.Extensions.Http" Version="7.0.0" />
-		<PackageReference Include="System.Security.Cryptography.Xml" Version="7.0.1" />
+		<PackageReference Include="Ardalis.SmartEnum" Version="2.1.0" />
+		<PackageReference Include="Microsoft.Extensions.Http" Version="6.0.0" />
+		<PackageReference Include="System.Security.Cryptography.Xml" Version="6.0.1" />
 	</ItemGroup>
 
 	<ItemGroup>
 		<None Include="..\..\README.md">
-		  <Pack>True</Pack>
-		  <PackagePath>\</PackagePath>
+			<Pack>True</Pack>
+			<PackagePath>\</PackagePath>
 		</None>
 		<None Include="Images\AR_LOGO03.jpg" Pack="true" PackagePath="\" />
 	</ItemGroup>

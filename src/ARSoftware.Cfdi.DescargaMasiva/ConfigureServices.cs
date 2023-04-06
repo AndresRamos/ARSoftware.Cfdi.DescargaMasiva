@@ -2,17 +2,18 @@
 using ARSoftware.Cfdi.DescargaMasiva.Services;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace ARSoftware.Cfdi.DescargaMasiva;
-
-public static class ConfigureServices
+namespace ARSoftware.Cfdi.DescargaMasiva
 {
-    public static IServiceCollection AddCfdiDescargaMasivaServices(this IServiceCollection serviceCollection)
+    public static class ConfigureServices
     {
-        serviceCollection.AddHttpClient<IHttpSoapClient, HttpSoapClient>();
-        serviceCollection.AddTransient<IAutenticacionService, AutenticacionService>();
-        serviceCollection.AddTransient<ISolicitudService, SolicitudService>();
-        serviceCollection.AddTransient<IVerificacionService, VerificacionService>();
-        serviceCollection.AddTransient<IDescargaService, DescargaService>();
-        return serviceCollection;
+        public static IServiceCollection AddCfdiDescargaMasivaServices(this IServiceCollection serviceCollection)
+        {
+            serviceCollection.AddHttpClient<IHttpSoapClient, HttpSoapClient>();
+            serviceCollection.AddTransient<IAutenticacionService, AutenticacionService>();
+            serviceCollection.AddTransient<ISolicitudService, SolicitudService>();
+            serviceCollection.AddTransient<IVerificacionService, VerificacionService>();
+            serviceCollection.AddTransient<IDescargaService, DescargaService>();
+            return serviceCollection;
+        }
     }
 }

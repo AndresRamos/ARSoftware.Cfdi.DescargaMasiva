@@ -1,13 +1,14 @@
 ﻿using System.Security.Cryptography.X509Certificates;
 
-namespace ARSoftware.Cfdi.DescargaMasiva.Helpers;
-
-public static class X509Certificate2Helper
+namespace ARSoftware.Cfdi.DescargaMasiva.Helpers
 {
-    public static X509Certificate2 GetCertificate(byte[] certificate, string password)
+    public static class X509Certificate2Helper
     {
-        return new X509Certificate2(certificate,
-            password,
-            X509KeyStorageFlags.MachineKeySet | X509KeyStorageFlags.PersistKeySet | X509KeyStorageFlags.Exportable);
+        public static X509Certificate2 GetCertificate(byte[] certificate, string password)
+        {
+            return new X509Certificate2(certificate,
+                password,
+                X509KeyStorageFlags.MachineKeySet | X509KeyStorageFlags.PersistKeySet | X509KeyStorageFlags.Exportable);
+        }
     }
 }
