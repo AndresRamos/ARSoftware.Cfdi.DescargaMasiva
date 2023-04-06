@@ -8,7 +8,7 @@ using ARSoftware.Cfdi.DescargaMasiva.Models;
 IHost host = Host.CreateDefaultBuilder(args)
     .ConfigureServices(services =>
     {
-        // Registrar servicios de descarga masiva con el contenedor de servicios
+        // Registrar servicios de descarga masiva con el proveedor de servicios
         services.AddCfdiDescargaMasivaServices();
     })
     .Build();
@@ -22,22 +22,15 @@ var logger = host.Services.GetRequiredService<ILogger<Program>>();
 
 logger.LogInformation("Iniciando ejemplo de como utilizar los servicios para descargar los CFDIs recibidos del dia de hoy.");
 
-// Parametros de ejemplo
-var rutaCertificadoPfx = @"C:\DescargaMasiva\certificado.pfx";
-byte[] certificadoPfx = await File.ReadAllBytesAsync(rutaCertificadoPfx, cancellationToken);
+// Crear X509Certificate2 del certificado PFX
+var rutaCertificadoPfx = @"C:\AR Software\CFDI Descarga Masiva\certificado.pfx";
 var certificadoPassword = "12345678a";
-DateTime fechaInicio = DateTime.Today;
-DateTime fechaFin = DateTime.Today;
-TipoSolicitud? tipoSolicitud = TipoSolicitud.Cfdi;
-var rfcEmisor = "";
-var rfcReceptores = new List<string> { "AAA010101AAAA" };
-var rfcSolicitante = "AAA010101AAAA";
-var rutaDescarga = @"C:\DescargaMasiva\CFDIs";
+byte[] certificadoPfx = await File.ReadAllBytesAsync(rutaCertificadoPfx, cancellationToken);
 
 logger.LogInformation("Creando el certificado SAT con el certificado PFX y contrasena.");
 X509Certificate2 certificadoSat = X509Certificate2Helper.GetCertificate(certificadoPfx, certificadoPassword);
 
-// Autenticacion
+// Peticion De Autenticacion
 logger.LogInformation("Buscando el servicio de autenticacion en el contenedor de servicios (Dependency Injection).");
 var autenticacionService = host.Services.GetRequiredService<IAutenticacionService>();
 
@@ -59,11 +52,20 @@ if (!autenticacionResult.AccessToken.IsValid)
 logger.LogInformation("La solicitud de autenticacion fue exitosa. AccessToken:{0}", autenticacionResult.AccessToken.DecodedValue);
 
 // Solicitud
+
+// Paremetros para buscar CFDIs recibidos por rango de fecha
+DateTime fechaInicio = DateTime.Today;
+DateTime fechaFin = DateTime.Today;
+TipoSolicitud tipoSolicitud = TipoSolicitud.Cfdi;
+var rfcEmisor = "";
+var rfcReceptores = new List<string> { "AAA010101AAA" };
+var rfcSolicitante = "AAA010101AAA";
+
 logger.LogInformation("Buscando el servicio de solicitud de descarga en el contenedor de servicios (Dependency Injection).");
 var solicitudService = host.Services.GetRequiredService<ISolicitudService>();
 
 logger.LogInformation("Creando solicitud de solicitud de descarga.");
-var solicitudRequest = SolicitudRequest.CreateInstance(fechaInicio,
+var solicitudPorRangoFecha = SolicitudRequest.CreateInstance(fechaInicio,
     fechaFin,
     tipoSolicitud,
     rfcEmisor,
@@ -72,7 +74,7 @@ var solicitudRequest = SolicitudRequest.CreateInstance(fechaInicio,
     autenticacionResult.AccessToken);
 
 logger.LogInformation("Enviando solicitud de solicitud de descarga.");
-SolicitudResult solicitudResult = await solicitudService.SendSoapRequestAsync(solicitudRequest, certificadoSat, cancellationToken);
+SolicitudResult solicitudResult = await solicitudService.SendSoapRequestAsync(solicitudPorRangoFecha, certificadoSat, cancellationToken);
 
 if (string.IsNullOrEmpty(solicitudResult.RequestId))
 {
@@ -105,24 +107,18 @@ if (verificacionResult.DownloadRequestStatusNumber != EstadoSolicitud.Terminada.
         verificacionResult.RequestStatusMessage);
 
     if (verificacionResult.DownloadRequestStatusNumber == EstadoSolicitud.Aceptada.Value.ToString())
-    {
         logger.LogInformation(
             "Es estado de la solicitud es Aceptada. Mandar otra solicitud de verificaion mas tarde para que el servicio web pueda procesar la solicitud.");
-    }
     else if (verificacionResult.DownloadRequestStatusNumber == EstadoSolicitud.EnProceso.Value.ToString())
-    {
         logger.LogInformation(
             "Es estado de la solicitud es En Proceso. Mandar otra solicitud de verificaion mas tarde para que el servicio web pueda procesar la solicitud.");
-    }
 
     throw new Exception();
 }
 
 logger.LogInformation("La solicitud de verificacion fue exitosa.");
 foreach (string idsPaquete in verificacionResult.PackageIds)
-{
     logger.LogInformation("PackageId:{0}", idsPaquete);
-}
 
 // Descarga
 logger.LogInformation("Buscando el servicio de verificacion en el contenedor de servicios (Dependency Injection).");
@@ -134,9 +130,11 @@ foreach (string? idsPaquete in verificacionResult.PackageIds)
     var descargaRequest = DescargaRequest.CreateInstace(idsPaquete, rfcSolicitante, autenticacionResult.AccessToken);
 
     logger.LogInformation("Enviando solicitud de descarga.");
-    DescargaResult? descargaResult = await descargarSolicitudService.SendSoapRequestAsync(descargaRequest,
+    DescargaResult descargaResult = await descargarSolicitudService.SendSoapRequestAsync(descargaRequest,
         certificadoSat,
         cancellationToken);
+
+    var rutaDescarga = @"C:\AR Software\CFDI Descarga Masiva\CFDIs";
 
     string fileName = Path.Combine(rutaDescarga, $"{idsPaquete}.zip");
     byte[] paqueteContenido = Convert.FromBase64String(descargaResult.Package);

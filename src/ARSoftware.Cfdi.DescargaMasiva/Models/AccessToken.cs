@@ -7,7 +7,7 @@ namespace ARSoftware.Cfdi.DescargaMasiva.Models
     /// <summary>
     ///     Token de autorizacion para autenticar peticiones con el web service de descarga masiva de CFDIs del SAT
     /// </summary>
-    public class AccessToken
+    public sealed class AccessToken
     {
         private AccessToken(string value)
         {

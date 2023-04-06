@@ -6,7 +6,7 @@ namespace ARSoftware.Cfdi.DescargaMasiva.Models
     /// <summary>
     ///     Resultado de la peticion de autenticacion.
     /// </summary>
-    public class AutenticacionResult
+    public sealed class AutenticacionResult
     {
         private AutenticacionResult(AccessToken accessToken,
                                     string faultCode,

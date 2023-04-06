@@ -2,7 +2,7 @@
 
 namespace ARSoftware.Cfdi.DescargaMasiva.Exceptions
 {
-    public class InvalidResponseContentException : Exception
+    public sealed class InvalidResponseContentException : Exception
     {
         private static readonly string DefaultMessage = "Response content is not in a valid format.";
 

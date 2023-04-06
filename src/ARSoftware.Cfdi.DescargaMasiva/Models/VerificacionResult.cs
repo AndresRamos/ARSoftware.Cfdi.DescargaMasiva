@@ -7,7 +7,7 @@ namespace ARSoftware.Cfdi.DescargaMasiva.Models
     /// <summary>
     ///     Resultado de la peticion de verificacion.
     /// </summary>
-    public class VerificacionResult
+    public sealed class VerificacionResult
     {
         private VerificacionResult(List<string> packageIds,
                                    string downloadRequestStatusNumber,

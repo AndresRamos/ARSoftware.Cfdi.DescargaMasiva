@@ -6,7 +6,7 @@ namespace ARSoftware.Cfdi.DescargaMasiva.Models
     /// <summary>
     ///     Resultado de la peticion SOAP
     /// </summary>
-    public class SoapRequestResult
+    public sealed class SoapRequestResult
     {
         private SoapRequestResult(HttpStatusCode httpStatusCode, string responseContent)
         {

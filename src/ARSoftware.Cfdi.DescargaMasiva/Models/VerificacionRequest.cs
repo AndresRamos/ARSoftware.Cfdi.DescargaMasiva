@@ -5,7 +5,7 @@ namespace ARSoftware.Cfdi.DescargaMasiva.Models
     /// <summary>
     ///     Peticion de verificacion.
     /// </summary>
-    public class VerificacionRequest
+    public sealed class VerificacionRequest
     {
         private VerificacionRequest(string requestId, string requestingRfc, AccessToken accessToken)
         {

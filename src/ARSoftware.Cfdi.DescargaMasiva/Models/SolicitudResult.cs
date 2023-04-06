@@ -6,7 +6,7 @@ namespace ARSoftware.Cfdi.DescargaMasiva.Models
     /// <summary>
     ///     Resultado de la peticion de solicitud.
     /// </summary>
-    public class SolicitudResult
+    public sealed class SolicitudResult
     {
         private SolicitudResult(string requestId,
                                 string requestStatusCode,

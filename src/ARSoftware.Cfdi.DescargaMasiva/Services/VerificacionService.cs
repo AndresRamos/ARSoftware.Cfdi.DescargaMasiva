@@ -12,7 +12,7 @@ using ARSoftware.Cfdi.DescargaMasiva.Models;
 
 namespace ARSoftware.Cfdi.DescargaMasiva.Services
 {
-    public class VerificacionService : IVerificacionService
+    public sealed class VerificacionService : IVerificacionService
     {
         private readonly IHttpSoapClient _httpSoapClient;
 
@@ -94,16 +94,12 @@ namespace ARSoftware.Cfdi.DescargaMasiva.Services
 
             XmlNode verificaSolicitudDescargaResultElement = xmlDocument.GetElementsByTagName("VerificaSolicitudDescargaResult")[0];
             if (verificaSolicitudDescargaResultElement is null)
-            {
                 throw new InvalidResponseContentException("Element VerificaSolicitudDescargaResult is missing in response.",
                     soapRequestResult.ResponseContent);
-            }
 
             if (verificaSolicitudDescargaResultElement.Attributes is null)
-            {
                 throw new InvalidResponseContentException("Attributes property of Element VerificaSolicitudDescargaResult is null.",
                     soapRequestResult.ResponseContent);
-            }
 
             string downloadRequestStatusNumber = verificaSolicitudDescargaResultElement.Attributes.GetNamedItem("EstadoSolicitud")?.Value ??
                                                  string.Empty;
@@ -120,9 +116,7 @@ namespace ARSoftware.Cfdi.DescargaMasiva.Services
                 XmlNodeList idsPaquetesElements = xmlDocument.GetElementsByTagName("IdsPaquetes");
 
                 foreach (XmlNode idPaqueteElement in idsPaquetesElements)
-                {
                     packageIdsList.Add(idPaqueteElement.InnerText);
-                }
             }
 
             return VerificacionResult.CreateInstance(packageIdsList,

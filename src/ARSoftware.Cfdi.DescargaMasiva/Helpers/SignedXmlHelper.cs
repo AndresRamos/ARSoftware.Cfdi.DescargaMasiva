@@ -1,12 +1,11 @@
-﻿using System;
-using System.Security.Cryptography.X509Certificates;
+﻿using System.Security.Cryptography.X509Certificates;
 using System.Security.Cryptography.Xml;
 using System.Xml;
 using ARSoftware.Cfdi.DescargaMasiva.Constants;
 
 namespace ARSoftware.Cfdi.DescargaMasiva.Helpers
 {
-    public class SignedXmlHelper
+    public static class SignedXmlHelper
     {
         /// <summary>
         ///     This method is used to sign all requests like solicitud, verificacion and descarga.
@@ -22,8 +21,7 @@ namespace ARSoftware.Cfdi.DescargaMasiva.Helpers
             signedXml.AddReference(reference);
 
             var keyInfoX509Data = new KeyInfoX509Data(x509Certificate2);
-            keyInfoX509Data.AddIssuerSerial(x509Certificate2.Issuer,
-                x509Certificate2.SerialNumber ?? throw new InvalidOperationException("Certificate serial number is null."));
+            keyInfoX509Data.AddIssuerSerial(x509Certificate2.Issuer, x509Certificate2.SerialNumber);
 
             var keyInfo = new KeyInfo();
             keyInfo.AddClause(keyInfoX509Data);
@@ -68,7 +66,7 @@ namespace ARSoftware.Cfdi.DescargaMasiva.Helpers
         ///     https://stackoverflow.com/questions/35735341/malformed-reference-element and
         ///     https://stackoverflow.com/questions/5099156/malformed-reference-element-when-adding-a-reference-based-on-an-id-attribute-w
         /// </summary>
-        internal class SignedXmlWithId : SignedXml
+        internal sealed class SignedXmlWithId : SignedXml
         {
             public SignedXmlWithId(XmlDocument xml) : base(xml)
             {
@@ -83,7 +81,7 @@ namespace ARSoftware.Cfdi.DescargaMasiva.Helpers
                 // check to see if it's a standard ID reference
                 XmlElement idElem = base.GetIdElement(doc, id);
 
-                if (idElem == null)
+                if (idElem is null)
                 {
                     var nsManager = new XmlNamespaceManager(doc.NameTable);
                     nsManager.AddNamespace(CfdiDescargaMasivaNamespaces.WsuPrefix, CfdiDescargaMasivaNamespaces.WsuNamespaceUrl);

@@ -5,7 +5,7 @@ namespace ARSoftware.Cfdi.DescargaMasiva.Models
     /// <summary>
     ///     Peticion de autenticacion.
     /// </summary>
-    public class AutenticacionRequest
+    public sealed class AutenticacionRequest
     {
         private AutenticacionRequest(DateTime tokenCreatedDateUtc, DateTime tokenExpiresDateUtc, Guid uuid)
         {

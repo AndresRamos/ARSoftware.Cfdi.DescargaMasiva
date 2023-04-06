@@ -11,7 +11,7 @@ using ARSoftware.Cfdi.DescargaMasiva.Models;
 
 namespace ARSoftware.Cfdi.DescargaMasiva.Services
 {
-    public class AutenticacionService : IAutenticacionService
+    public sealed class AutenticacionService : IAutenticacionService
     {
         private readonly IHttpSoapClient _httpSoapClient;
 
@@ -141,13 +141,13 @@ namespace ARSoftware.Cfdi.DescargaMasiva.Services
 
             XmlNode errorElement = xmlDocument.GetElementsByTagName("s:Fault")[0];
             if (errorElement is null)
-            {
                 throw new InvalidResponseContentException("Elements AutenticaResult and s:Fault are missing in response.",
                     soapRequestResult.ResponseContent);
-            }
 
-            string faultCode = xmlDocument.GetElementsByTagName("faultcode")[0].InnerXml;
-            string faultString = xmlDocument.GetElementsByTagName("faultstring")[0].InnerXml;
+            string faultCode = xmlDocument.GetElementsByTagName("faultcode")[0]?.InnerXml ??
+                               throw new InvalidOperationException("Element faultcode not found.");
+            string faultString = xmlDocument.GetElementsByTagName("faultstring")[0]?.InnerXml ??
+                                 throw new InvalidOperationException("Element faultstring not found.");
             return AutenticacionResult.CreateFailure(faultCode,
                 faultString,
                 soapRequestResult.HttpStatusCode,

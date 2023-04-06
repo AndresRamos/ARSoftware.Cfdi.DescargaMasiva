@@ -5,7 +5,7 @@ namespace ARSoftware.Cfdi.DescargaMasiva.Models
     /// <summary>
     ///     Peticion de descarga.
     /// </summary>
-    public class DescargaRequest
+    public sealed class DescargaRequest
     {
         private DescargaRequest(string packageId, string requestingRfc, AccessToken accessToken)
         {

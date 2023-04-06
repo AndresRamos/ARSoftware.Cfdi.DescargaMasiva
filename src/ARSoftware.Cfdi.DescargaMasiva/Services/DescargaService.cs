@@ -1,4 +1,5 @@
-﻿using System.Security.Cryptography.X509Certificates;
+﻿using System;
+using System.Security.Cryptography.X509Certificates;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Xml;
@@ -10,7 +11,7 @@ using ARSoftware.Cfdi.DescargaMasiva.Models;
 
 namespace ARSoftware.Cfdi.DescargaMasiva.Services
 {
-    public class DescargaService : IDescargaService
+    public sealed class DescargaService : IDescargaService
     {
         private readonly IHttpSoapClient _httpSoapClient;
 
@@ -92,17 +93,14 @@ namespace ARSoftware.Cfdi.DescargaMasiva.Services
 
             XmlNode element = xmlDocument.GetElementsByTagName("h:respuesta")[0];
             if (element is null)
-            {
                 throw new InvalidResponseContentException("Element h:respuesta is missing in response.", soapRequestResult.ResponseContent);
-            }
 
             if (element.Attributes is null)
-            {
                 throw new InvalidResponseContentException("Attributes property of Element h:respuesta is null.",
                     soapRequestResult.ResponseContent);
-            }
 
-            string package = xmlDocument.GetElementsByTagName("Paquete")[0].InnerXml;
+            string package = xmlDocument.GetElementsByTagName("Paquete")[0]?.InnerXml ??
+                             throw new InvalidOperationException("Element Paquete not found.");
             string requestStatusCode = element.Attributes.GetNamedItem("CodEstatus")?.Value ?? string.Empty;
             string requestStatusMessage = element.Attributes.GetNamedItem("Mensaje")?.Value ?? string.Empty;
 

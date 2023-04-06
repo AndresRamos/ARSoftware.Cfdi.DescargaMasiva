@@ -10,7 +10,7 @@ using ARSoftware.Cfdi.DescargaMasiva.Models;
 
 namespace ARSoftware.Cfdi.DescargaMasiva.Services
 {
-    public class HttpSoapClient : IHttpSoapClient
+    public sealed class HttpSoapClient : IHttpSoapClient
     {
         private readonly HttpClient _httpClient;
 
@@ -26,24 +26,16 @@ namespace ARSoftware.Cfdi.DescargaMasiva.Services
                                                               CancellationToken cancellationToken)
         {
             if (url is null)
-            {
                 throw new ArgumentNullException(nameof(url));
-            }
 
             if (soapAction is null)
-            {
                 throw new ArgumentNullException(nameof(soapAction));
-            }
 
             if (accessToken is null)
-            {
                 throw new ArgumentNullException(nameof(accessToken));
-            }
 
             if (requestContent is null)
-            {
                 throw new ArgumentNullException(nameof(requestContent));
-            }
 
             _httpClient.DefaultRequestHeaders.Clear();
 
@@ -54,9 +46,7 @@ namespace ARSoftware.Cfdi.DescargaMasiva.Services
             request.Headers.Add("SOAPAction", soapAction);
 
             if (accessToken.IsValid)
-            {
                 request.Headers.Add("Authorization", accessToken.HttpAuthorizationHeader);
-            }
 
             request.Content = new StringContent(requestContent, Encoding.UTF8, MediaTypeNames.Text.Xml);
 

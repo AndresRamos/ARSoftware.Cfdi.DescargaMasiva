@@ -1,6 +1,6 @@
 ﻿namespace ARSoftware.Cfdi.DescargaMasiva.Constants
 {
-    public class CfdiDescargaMasivaNamespaces
+    public static class CfdiDescargaMasivaNamespaces
     {
         /// <summary>
         ///     URL= http://www.w3.org/2000/09/xmldsig#
