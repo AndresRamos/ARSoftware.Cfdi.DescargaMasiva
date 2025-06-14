@@ -31,9 +31,9 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Ardalis.SmartEnum" Version="2.1.0" />
-		<PackageReference Include="Microsoft.Extensions.Http" Version="6.0.0" />
-		<PackageReference Include="System.Security.Cryptography.Xml" Version="6.0.1" />
+		<PackageReference Include="Ardalis.SmartEnum" Version="8.2.0" />
+		<PackageReference Include="Microsoft.Extensions.Http" Version="9.0.6" />
+		<PackageReference Include="System.Security.Cryptography.Xml" Version="9.0.6" />
 	</ItemGroup>
 
 	<ItemGroup>
