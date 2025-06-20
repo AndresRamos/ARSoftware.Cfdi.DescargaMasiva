@@ -59,7 +59,7 @@ namespace ARSoftware.Cfdi.DescargaMasiva.Services
             AccessToken accessToken,
             CancellationToken cancellationToken = default)
         {
-            return await _httpSoapClient.SendRequestAsync(CfdiDescargaMasivaWebServiceUrls.DescargaUrl,
+            return await _httpSoapClient.SendRequestAsync(CfdiDescargaMasivaWebServiceUrls.DescargaMasivaService,
                 DescargaMasivaSoapActionUrls.Descargar, accessToken, soapRequestContent, cancellationToken);
         }
 
@@ -69,8 +69,9 @@ namespace ARSoftware.Cfdi.DescargaMasiva.Services
         {
             string soapRequestContent = GenerateSoapRequestEnvelopeXmlContent(descargaRequest, certificate);
 
-            SoapRequestResult soapRequestResult = await _httpSoapClient.SendRequestAsync(CfdiDescargaMasivaWebServiceUrls.DescargaUrl,
-                DescargaMasivaSoapActionUrls.Descargar, descargaRequest.AccessToken, soapRequestContent, cancellationToken);
+            SoapRequestResult soapRequestResult = await _httpSoapClient.SendRequestAsync(
+                CfdiDescargaMasivaWebServiceUrls.DescargaMasivaService, DescargaMasivaSoapActionUrls.Descargar, descargaRequest.AccessToken,
+                soapRequestContent, cancellationToken);
 
             return GetSoapResponseResult(soapRequestResult);
         }
