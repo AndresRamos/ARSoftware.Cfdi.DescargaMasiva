@@ -21,33 +21,28 @@ namespace ARSoftware.Cfdi.DescargaMasiva.Services
 
         public string GenerateSoapRequestEnvelopeXmlContent(SolicitudRequest solicitudRequest, X509Certificate2 certificate)
         {
-            var xmlDocument = new XmlDocument();
+            XmlDocument xmlDocument = new();
 
-            XmlElement envelopElement = xmlDocument.CreateElement(CfdiDescargaMasivaNamespaces.S11Prefix,
-                "Envelope",
+            XmlElement envelopElement = xmlDocument.CreateElement(CfdiDescargaMasivaNamespaces.S11Prefix, "Envelope",
                 CfdiDescargaMasivaNamespaces.S11NamespaceUrl);
             envelopElement.SetAttribute($"xmlns:{CfdiDescargaMasivaNamespaces.S11Prefix}", CfdiDescargaMasivaNamespaces.S11NamespaceUrl);
             envelopElement.SetAttribute($"xmlns:{CfdiDescargaMasivaNamespaces.DesPrefix}", CfdiDescargaMasivaNamespaces.DesNamespaceUrl);
             envelopElement.SetAttribute($"xmlns:{CfdiDescargaMasivaNamespaces.DsPrefix}", CfdiDescargaMasivaNamespaces.DsNamespaceUrl);
             xmlDocument.AppendChild(envelopElement);
 
-            XmlElement headerElement = xmlDocument.CreateElement(CfdiDescargaMasivaNamespaces.S11Prefix,
-                "Header",
+            XmlElement headerElement = xmlDocument.CreateElement(CfdiDescargaMasivaNamespaces.S11Prefix, "Header",
                 CfdiDescargaMasivaNamespaces.S11NamespaceUrl);
             envelopElement.AppendChild(headerElement);
 
-            XmlElement bodyElement = xmlDocument.CreateElement(CfdiDescargaMasivaNamespaces.S11Prefix,
-                "Body",
+            XmlElement bodyElement = xmlDocument.CreateElement(CfdiDescargaMasivaNamespaces.S11Prefix, "Body",
                 CfdiDescargaMasivaNamespaces.S11NamespaceUrl);
             envelopElement.AppendChild(bodyElement);
 
-            XmlElement solicitaDescargaElement = xmlDocument.CreateElement(CfdiDescargaMasivaNamespaces.DesPrefix,
-                "SolicitaDescarga",
+            XmlElement solicitaDescargaElement = xmlDocument.CreateElement(CfdiDescargaMasivaNamespaces.DesPrefix, "SolicitaDescarga",
                 CfdiDescargaMasivaNamespaces.DesNamespaceUrl);
             bodyElement.AppendChild(solicitaDescargaElement);
 
-            XmlElement solicitudElement = xmlDocument.CreateElement(CfdiDescargaMasivaNamespaces.DesPrefix,
-                "solicitud",
+            XmlElement solicitudElement = xmlDocument.CreateElement(CfdiDescargaMasivaNamespaces.DesPrefix, "solicitud",
                 CfdiDescargaMasivaNamespaces.DesNamespaceUrl);
 
             if (!solicitudRequest.HasUuid)
@@ -85,13 +80,11 @@ namespace ARSoftware.Cfdi.DescargaMasiva.Services
 
             if (!solicitudRequest.HasUuid)
             {
-                XmlElement rfcReceptores = xmlDocument.CreateElement(CfdiDescargaMasivaNamespaces.DesPrefix,
-                    "RfcReceptores",
+                XmlElement rfcReceptores = xmlDocument.CreateElement(CfdiDescargaMasivaNamespaces.DesPrefix, "RfcReceptores",
                     CfdiDescargaMasivaNamespaces.DesNamespaceUrl);
                 foreach (string item in solicitudRequest.RecipientsRfcs)
                 {
-                    XmlElement rfcReceptorElement = xmlDocument.CreateElement(CfdiDescargaMasivaNamespaces.DesPrefix,
-                        "RfcReceptor",
+                    XmlElement rfcReceptorElement = xmlDocument.CreateElement(CfdiDescargaMasivaNamespaces.DesPrefix, "RfcReceptor",
                         CfdiDescargaMasivaNamespaces.DesNamespaceUrl);
                     rfcReceptorElement.InnerText = item;
                     rfcReceptores.AppendChild(rfcReceptorElement);
@@ -108,53 +101,49 @@ namespace ARSoftware.Cfdi.DescargaMasiva.Services
         }
 
         public async Task<SoapRequestResult> SendSoapRequestAsync(string soapRequestContent,
-                                                                  AccessToken accessToken,
-                                                                  CancellationToken cancellationToken = default)
+            AccessToken accessToken,
+            CancellationToken cancellationToken = default)
         {
-            return await _httpSoapClient.SendRequestAsync(CfdiDescargaMasivaWebServiceUrls.SolicitudUrl,
-                CfdiDescargaMasivaWebServiceUrls.SolicitudSoapActionUrl,
-                accessToken,
-                soapRequestContent,
-                cancellationToken);
+            return await _httpSoapClient.SendRequestAsync(CfdiDescargaMasivaWebServiceUrls.SolicitaDescargaService,
+                DescargaMasivaSoapActionUrls.Solicitud, accessToken, soapRequestContent, cancellationToken);
         }
 
         public async Task<SolicitudResult> SendSoapRequestAsync(SolicitudRequest solicitudRequest,
-                                                                X509Certificate2 certificate,
-                                                                CancellationToken cancellationToken = default)
+            X509Certificate2 certificate,
+            CancellationToken cancellationToken = default)
         {
             string soapRequestContent = GenerateSoapRequestEnvelopeXmlContent(solicitudRequest, certificate);
 
-            SoapRequestResult soapRequestResult = await _httpSoapClient.SendRequestAsync(CfdiDescargaMasivaWebServiceUrls.SolicitudUrl,
-                CfdiDescargaMasivaWebServiceUrls.SolicitudSoapActionUrl,
-                solicitudRequest.AccessToken,
-                soapRequestContent,
-                cancellationToken);
+            SoapRequestResult soapRequestResult = await _httpSoapClient.SendRequestAsync(
+                CfdiDescargaMasivaWebServiceUrls.SolicitaDescargaService, DescargaMasivaSoapActionUrls.Solicitud,
+                solicitudRequest.AccessToken, soapRequestContent, cancellationToken);
 
             return GetSoapResponseResult(soapRequestResult);
         }
 
         public SolicitudResult GetSoapResponseResult(SoapRequestResult soapRequestResult)
         {
-            var xmlDocument = new XmlDocument();
+            XmlDocument xmlDocument = new();
             xmlDocument.LoadXml(soapRequestResult.ResponseContent);
 
             XmlNode element = xmlDocument.GetElementsByTagName("SolicitaDescargaResult")[0];
             if (element is null)
+            {
                 throw new InvalidResponseContentException("Element SolicitaDescargaResult is missing in response.",
                     soapRequestResult.ResponseContent);
+            }
 
             if (element.Attributes is null)
+            {
                 throw new InvalidResponseContentException("Attributes property of Element SolicitaDescargaResult is null.",
                     soapRequestResult.ResponseContent);
+            }
 
             string requestId = element.Attributes.GetNamedItem("IdSolicitud")?.Value ?? string.Empty;
             string requestStatusCode = element.Attributes.GetNamedItem("CodEstatus")?.Value ?? string.Empty;
             string requestStatusMessage = element.Attributes.GetNamedItem("Mensaje")?.Value ?? string.Empty;
 
-            return SolicitudResult.CreateInstance(requestId,
-                requestStatusCode,
-                requestStatusMessage,
-                soapRequestResult.HttpStatusCode,
+            return SolicitudResult.CreateInstance(requestId, requestStatusCode, requestStatusMessage, soapRequestResult.HttpStatusCode,
                 soapRequestResult.ResponseContent);
         }
     }
