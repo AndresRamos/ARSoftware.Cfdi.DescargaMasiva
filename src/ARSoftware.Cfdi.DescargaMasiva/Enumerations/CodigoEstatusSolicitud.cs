@@ -100,6 +100,12 @@ namespace ARSoftware.Cfdi.DescargaMasiva.Enumerations
         public static readonly CodigoEstatusSolicitud _5008 = new("5008", 5008, "Máximo de descargas permitidas",
             "Un paquete solo puede descargarse un total de 2 veces, una vez agotadas, ya no se podrá volver a descargar");
 
+        /// <summary>
+        ///     5012 = Máximo de descargas permitidas
+        /// </summary>
+        public static readonly CodigoEstatusSolicitud _5012 = new("5012", 5012,
+            "No se permite la descarga de xml que se encuentren cancelados", "");
+
         private CodigoEstatusSolicitud(string name, int value, string mensaje, string observaciones) : base(name, value)
         {
             Mensaje = mensaje;
