@@ -39,7 +39,7 @@ namespace ARSoftware.Cfdi.DescargaMasiva.Services
             envelopElement.AppendChild(bodyElement);
 
             XmlElement solicitaDescargaElement = xmlDocument.CreateElement(CfdiDescargaMasivaNamespaces.DesPrefix,
-                "SolicitaDescargaEmitidos>", CfdiDescargaMasivaNamespaces.DesNamespaceUrl);
+                "SolicitaDescargaEmitidos", CfdiDescargaMasivaNamespaces.DesNamespaceUrl);
             bodyElement.AppendChild(solicitaDescargaElement);
 
             XmlElement solicitudElement = xmlDocument.CreateElement(CfdiDescargaMasivaNamespaces.DesPrefix, "solicitud",
