@@ -84,8 +84,7 @@ logger.LogInformation("Buscando el servicio de verificacion en el contenedor de 
 IVerificacionService verificaSolicitudService = host.Services.GetRequiredService<IVerificacionService>();
 
 logger.LogInformation("Creando solicitud de verificacion.");
-VerificacionRequest verificacionRequest =
-    VerificacionRequest.CreateInstance(solicitudResult.IdSolicitud, rfcSolicitante, autenticacionResult.AccessToken);
+VerificacionRequest verificacionRequest = new(solicitudResult.IdSolicitud, rfcSolicitante, autenticacionResult.AccessToken);
 
 logger.LogInformation("Enviando solicitud de verificacion.");
 VerificacionResult verificacionResult = await verificaSolicitudService.SendSoapRequestAsync(verificacionRequest,
