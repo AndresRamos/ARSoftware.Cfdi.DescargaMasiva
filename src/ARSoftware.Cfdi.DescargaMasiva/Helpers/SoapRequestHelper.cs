@@ -14,7 +14,7 @@ namespace ARSoftware.Cfdi.DescargaMasiva.Helpers
 
         public static string ToBinarySecurityTokenId(this Guid uuid)
         {
-            return $"uuid-{uuid}-1";
+            return $"uuid-{uuid}-4";
         }
 
         public static string ToSoapStartDateString(this DateTime date)
