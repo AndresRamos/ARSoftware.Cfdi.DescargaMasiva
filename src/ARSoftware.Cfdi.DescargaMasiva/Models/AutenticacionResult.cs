@@ -1,50 +1,27 @@
-﻿using System;
-using System.Net;
+﻿using System.Net;
 
 namespace ARSoftware.Cfdi.DescargaMasiva.Models
 {
     /// <summary>
     ///     Resultado de la peticion de autenticacion.
     /// </summary>
-    public sealed class AutenticacionResult
+    /// <param name="AccessToken">Token de autorizacion para autenticar peticiones con el web service.</param>
+    /// <param name="FaultCode"></param>
+    /// <param name="FaultString"></param>
+    /// <param name="HttpStatusCode">Codigo de estatus de la respuesta HTTP.</param>
+    /// <param name="ResponseContent">Contenido del mensage de la respuesta HTTP.</param>
+    public sealed record AutenticacionResult(
+        AccessToken AccessToken,
+        string FaultCode,
+        string FaultString,
+        HttpStatusCode HttpStatusCode,
+        string ResponseContent)
     {
-        private AutenticacionResult(AccessToken accessToken,
-                                    string faultCode,
-                                    string faultString,
-                                    HttpStatusCode httpStatusCode,
-                                    string responseContent)
-        {
-            AccessToken = accessToken ?? throw new ArgumentNullException(nameof(accessToken));
-            FaultCode = faultCode ?? throw new ArgumentNullException(nameof(faultCode));
-            FaultString = faultString ?? throw new ArgumentNullException(nameof(faultString));
-            HttpStatusCode = httpStatusCode;
-            ResponseContent = responseContent ?? throw new ArgumentNullException(nameof(responseContent));
-        }
-
-        /// <summary>
-        ///     Token de autorizacion para autenticar peticiones con el web service.
-        /// </summary>
-        public AccessToken AccessToken { get; }
-
-        public string FaultCode { get; }
-
-        public string FaultString { get; }
-
-        /// <summary>
-        ///     Codigo de estatus de la respuesta HTTP.
-        /// </summary>
-        public HttpStatusCode HttpStatusCode { get; }
-
-        /// <summary>
-        ///     Contenido del mensage de la respuesta HTTP.
-        /// </summary>
-        public string ResponseContent { get; }
-
         public static AutenticacionResult CreateInstance(AccessToken accessToken,
-                                                         string faultCode,
-                                                         string faultString,
-                                                         HttpStatusCode httpStatusCode,
-                                                         string responseContent)
+            string faultCode,
+            string faultString,
+            HttpStatusCode httpStatusCode,
+            string responseContent)
         {
             return new AutenticacionResult(accessToken, faultCode, faultString, httpStatusCode, responseContent);
         }
@@ -55,9 +32,9 @@ namespace ARSoftware.Cfdi.DescargaMasiva.Models
         }
 
         public static AutenticacionResult CreateFailure(string faultCode,
-                                                        string faultString,
-                                                        HttpStatusCode httpStatusCode,
-                                                        string responseContent)
+            string faultString,
+            HttpStatusCode httpStatusCode,
+            string responseContent)
         {
             return new AutenticacionResult(AccessToken.CreateEmpty(), faultCode, faultString, httpStatusCode, responseContent);
         }
