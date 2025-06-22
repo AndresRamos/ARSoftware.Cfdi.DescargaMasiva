@@ -13,7 +13,7 @@
         /// <summary>
         ///     Contiene el RFC del que está realizando la solicitud de descarga.
         /// </summary>
-        public string RfcSolicitante { get; init; }
+        public string RfcSolicitante { get; init; } = string.Empty;
 
         /// <summary>
         ///     Folio Fiscal con formato:

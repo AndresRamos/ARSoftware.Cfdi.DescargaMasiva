@@ -115,14 +115,14 @@ namespace ARSoftware.Cfdi.DescargaMasiva.Services
             XmlDocument xmlDocument = new();
             xmlDocument.LoadXml(soapRequestResult.ResponseContent);
 
-            XmlNode autenticaResultElement = xmlDocument.GetElementsByTagName("AutenticaResult")[0];
+            XmlNode? autenticaResultElement = xmlDocument.GetElementsByTagName("AutenticaResult")[0];
             if (autenticaResultElement != null)
             {
                 AccessToken accessToken = AccessToken.CreateInstance(autenticaResultElement.InnerXml);
                 return AutenticacionResult.CreateSuccess(accessToken, soapRequestResult.HttpStatusCode, soapRequestResult.ResponseContent);
             }
 
-            XmlNode errorElement = xmlDocument.GetElementsByTagName("s:Fault")[0];
+            XmlNode? errorElement = xmlDocument.GetElementsByTagName("s:Fault")[0];
             if (errorElement is null)
             {
                 throw new InvalidResponseContentException("Elements AutenticaResult and s:Fault are missing in response.",

@@ -82,7 +82,7 @@ namespace ARSoftware.Cfdi.DescargaMasiva.Services
             XmlDocument xmlDocument = new();
             xmlDocument.LoadXml(soapRequestResult.ResponseContent);
 
-            XmlNode verificaSolicitudDescargaResultElement = xmlDocument.GetElementsByTagName("VerificaSolicitudDescargaResult")[0];
+            XmlNode? verificaSolicitudDescargaResultElement = xmlDocument.GetElementsByTagName("VerificaSolicitudDescargaResult")[0];
             if (verificaSolicitudDescargaResultElement is null)
             {
                 throw new InvalidResponseContentException("Element VerificaSolicitudDescargaResult is missing in response.",
