@@ -18,6 +18,19 @@ namespace ARSoftware.Cfdi.DescargaMasiva.Interfaces
         /// <summary>
         ///     Envia la peticion al web service de descarga masiva de CFDIs del SAT.
         /// </summary>
+        /// <param name="soapRequestContent">Contenido para la peticion SOAP generado por GenerateSoapRequestEnvelopeXmlContent</param>
+        /// <param name="accessToken">Token de autorizacion que regresa la peticion de Autenticacion</param>
+        /// <param name="cancellationToken">Token de cancelacion</param>
+        /// <returns>
+        ///     Resultado de la peticion SOAP.
+        /// </returns>
+        Task<SoapRequestResult> SendSoapRequestAsync(string soapRequestContent,
+            AccessToken accessToken,
+            CancellationToken cancellationToken);
+
+        /// <summary>
+        ///     Envia la peticion al web service de descarga masiva de CFDIs del SAT.
+        /// </summary>
         /// <param name="solicitudRequest">Peticion</param>
         /// <param name="certificate">Certificado SAT (.pfx)</param>
         /// <param name="cancellationToken">Token de cancelacion</param>
