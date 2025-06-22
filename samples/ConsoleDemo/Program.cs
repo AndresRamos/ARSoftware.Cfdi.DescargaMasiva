@@ -63,14 +63,8 @@ logger.LogInformation("Buscando el servicio de solicitud de descarga en el conte
 ISolicitudDescargaRecibidosService solicitudService = host.Services.GetRequiredService<ISolicitudDescargaRecibidosService>();
 
 logger.LogInformation("Creando solicitud de solicitud de descarga.");
-SolicitudDescargaRecibidosRequest solicitudPorRangoFecha = new()
-{
-    AccessToken = autenticacionResult.AccessToken,
-    FechaInicial = fechaInicio,
-    FechaFinal = fechaFin,
-    RfcReceptor = rfcReceptor,
-    TipoSolicitud = tipoSolicitud
-};
+SolicitudDescargaRecibidosRequest solicitudPorRangoFecha =
+    new(autenticacionResult.AccessToken, fechaInicio, fechaFin, rfcReceptor, tipoSolicitud);
 
 logger.LogInformation("Enviando solicitud de solicitud de descarga.");
 SolicitudDescargaRecibidosResult solicitudResult =
