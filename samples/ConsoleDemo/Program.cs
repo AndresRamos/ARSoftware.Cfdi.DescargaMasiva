@@ -130,7 +130,7 @@ IDescargaService descargarSolicitudService = host.Services.GetRequiredService<ID
 foreach (string idsPaquete in verificacionResult.PackageIds)
 {
     logger.LogInformation("Creando solicitud de descarga.");
-    DescargaRequest descargaRequest = DescargaRequest.CreateInstace(idsPaquete, rfcSolicitante, autenticacionResult.AccessToken);
+    DescargaRequest descargaRequest = DescargaRequest.CreateInstance(idsPaquete, rfcSolicitante, autenticacionResult.AccessToken);
 
     logger.LogInformation("Enviando solicitud de descarga.");
     DescargaResult descargaResult = await descargarSolicitudService.SendSoapRequestAsync(descargaRequest,

@@ -10,7 +10,7 @@ namespace ARSoftware.Cfdi.DescargaMasiva.Models
     /// <param name="FaultString"></param>
     /// <param name="HttpStatusCode">Codigo de estatus de la respuesta HTTP.</param>
     /// <param name="ResponseContent">Contenido del mensage de la respuesta HTTP.</param>
-    public sealed record AutenticacionResult(
+    public record AutenticacionResult(
         AccessToken AccessToken,
         string FaultCode,
         string FaultString,
