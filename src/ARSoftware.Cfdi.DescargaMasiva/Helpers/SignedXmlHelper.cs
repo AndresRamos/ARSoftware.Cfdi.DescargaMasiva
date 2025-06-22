@@ -1,4 +1,5 @@
-﻿using System.Security.Cryptography.X509Certificates;
+﻿using System;
+using System.Security.Cryptography.X509Certificates;
 using System.Security.Cryptography.Xml;
 using System.Xml;
 using ARSoftware.Cfdi.DescargaMasiva.Constants;
@@ -13,17 +14,21 @@ namespace ARSoftware.Cfdi.DescargaMasiva.Helpers
         /// </summary>
         public static XmlElement SignRequest(XmlElement xmlElement, X509Certificate2 x509Certificate2)
         {
-            var signedXml = new SignedXml(xmlElement) { SigningKey = x509Certificate2.GetRSAPrivateKey() };
+            SignedXml signedXml = new(xmlElement) { SigningKey = x509Certificate2.GetRSAPrivateKey() };
+
+            if (signedXml.SignedInfo is null)
+                throw new InvalidOperationException("SignedInfo cannot be null.");
+
             signedXml.SignedInfo.SignatureMethod = SignedXml.XmlDsigRSASHA1Url;
 
-            var reference = new Reference { Uri = "", DigestMethod = SignedXml.XmlDsigSHA1Url };
+            Reference reference = new() { Uri = "", DigestMethod = SignedXml.XmlDsigSHA1Url };
             reference.AddTransform(new XmlDsigEnvelopedSignatureTransform());
             signedXml.AddReference(reference);
 
-            var keyInfoX509Data = new KeyInfoX509Data(x509Certificate2);
+            KeyInfoX509Data keyInfoX509Data = new(x509Certificate2);
             keyInfoX509Data.AddIssuerSerial(x509Certificate2.Issuer, x509Certificate2.SerialNumber);
 
-            var keyInfo = new KeyInfo();
+            KeyInfo keyInfo = new();
             keyInfo.AddClause(keyInfoX509Data);
             signedXml.KeyInfo = keyInfo;
 
@@ -36,20 +41,24 @@ namespace ARSoftware.Cfdi.DescargaMasiva.Helpers
         ///     This method is only used to sign the autenticacion service
         /// </summary>
         public static XmlElement SignAuthenticationRequest(XmlElement xmlElement,
-                                                           X509Certificate2 x509Certificate2,
-                                                           string referenceUri,
-                                                           XmlElement securityTokenReferenceElement)
+            X509Certificate2 x509Certificate2,
+            string referenceUri,
+            XmlElement securityTokenReferenceElement)
         {
-            var signedXml = new SignedXmlWithId(xmlElement) { SigningKey = x509Certificate2.GetRSAPrivateKey() };
+            SignedXmlWithId signedXml = new(xmlElement) { SigningKey = x509Certificate2.GetRSAPrivateKey() };
+
+            if (signedXml.SignedInfo is null)
+                throw new InvalidOperationException("SignedInfo cannot be null.");
+
             signedXml.SignedInfo.SignatureMethod = SignedXml.XmlDsigRSASHA1Url;
             signedXml.SignedInfo.CanonicalizationMethod = SignedXml.XmlDsigExcC14NTransformUrl;
 
-            var reference = new Reference { Uri = referenceUri, DigestMethod = SignedXml.XmlDsigSHA1Url };
+            Reference reference = new() { Uri = referenceUri, DigestMethod = SignedXml.XmlDsigSHA1Url };
             reference.AddTransform(new XmlDsigExcC14NTransform());
             signedXml.AddReference(reference);
 
-            var keyInfo = new KeyInfo();
-            var keyInfoNode = new KeyInfoNode { Value = securityTokenReferenceElement };
+            KeyInfo keyInfo = new();
+            KeyInfoNode keyInfoNode = new() { Value = securityTokenReferenceElement };
             keyInfo.AddClause(keyInfoNode);
             signedXml.KeyInfo = keyInfo;
 
@@ -78,12 +87,15 @@ namespace ARSoftware.Cfdi.DescargaMasiva.Helpers
 
             public override XmlElement GetIdElement(XmlDocument doc, string id)
             {
+                if (doc is null)
+                    throw new ArgumentNullException(nameof(doc), "The XmlDocument cannot be null.");
+
                 // check to see if it's a standard ID reference
                 XmlElement idElem = base.GetIdElement(doc, id);
 
                 if (idElem is null)
                 {
-                    var nsManager = new XmlNamespaceManager(doc.NameTable);
+                    XmlNamespaceManager nsManager = new(doc.NameTable);
                     nsManager.AddNamespace(CfdiDescargaMasivaNamespaces.WsuPrefix, CfdiDescargaMasivaNamespaces.WsuNamespaceUrl);
 
                     idElem = doc.SelectSingleNode("//*[@wsu:Id=\"" + id + "\"]", nsManager) as XmlElement;
