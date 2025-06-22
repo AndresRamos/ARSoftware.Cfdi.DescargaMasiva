@@ -115,7 +115,7 @@ namespace ARSoftware.Cfdi.DescargaMasiva.Services
                 }
             }
 
-            return VerificacionResult.CreateInstance(packageIdsList, downloadRequestStatusNumber, downloadRequestStatusCode, numberOfCfdis,
+            return new VerificacionResult(packageIdsList, downloadRequestStatusNumber, downloadRequestStatusCode, numberOfCfdis,
                 requestStatusCode, requestStatusMessage, soapRequestResult.HttpStatusCode, soapRequestResult.ResponseContent);
         }
     }
