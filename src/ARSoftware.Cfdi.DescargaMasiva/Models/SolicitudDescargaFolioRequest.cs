@@ -3,24 +3,14 @@
     /// <summary>
     ///     Peticion de solicitud de descarga de un CFDI.
     /// </summary>
-    public record SolicitudDescargaFolioRequest
+    /// <param name="AccessToken">Token de autorizacion.</param>
+    /// <param name="Folio">Folio Fiscal con formato: XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX. Parámetro obligatorio.</param>
+    public record SolicitudDescargaFolioRequest(AccessToken AccessToken, string Folio)
     {
-        /// <summary>
-        ///     Token de autorizacion.
-        /// </summary>
-        public required AccessToken AccessToken { get; init; }
-
         /// <summary>
         ///     Contiene el RFC del que está realizando la solicitud de descarga.
         /// </summary>
         public string RfcSolicitante { get; init; } = string.Empty;
-
-        /// <summary>
-        ///     Folio Fiscal con formato:
-        ///     XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX
-        ///     Parámetro obligatorio.
-        /// </summary>
-        public required string Folio { get; init; }
 
         public bool HasRfcSolicitante => !string.IsNullOrEmpty(RfcSolicitante);
     }
