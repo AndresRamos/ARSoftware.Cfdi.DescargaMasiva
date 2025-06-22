@@ -85,7 +85,7 @@ namespace ARSoftware.Cfdi.DescargaMasiva.Services
             XmlDocument xmlDocument = new();
             xmlDocument.LoadXml(soapRequestResult.ResponseContent);
 
-            XmlNode element = xmlDocument.GetElementsByTagName("SolicitaDescargaFolioResult")[0];
+            XmlNode? element = xmlDocument.GetElementsByTagName("SolicitaDescargaFolioResult")[0];
             if (element is null)
             {
                 throw new InvalidResponseContentException("Element SolicitaDescargaFolioResult is missing in response.",

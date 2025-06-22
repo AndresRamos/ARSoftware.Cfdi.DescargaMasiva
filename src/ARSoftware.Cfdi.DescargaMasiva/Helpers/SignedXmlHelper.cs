@@ -85,13 +85,13 @@ namespace ARSoftware.Cfdi.DescargaMasiva.Helpers
             {
             }
 
-            public override XmlElement GetIdElement(XmlDocument doc, string id)
+            public override XmlElement? GetIdElement(XmlDocument? doc, string id)
             {
                 if (doc is null)
                     throw new ArgumentNullException(nameof(doc), "The XmlDocument cannot be null.");
 
                 // check to see if it's a standard ID reference
-                XmlElement idElem = base.GetIdElement(doc, id);
+                XmlElement? idElem = base.GetIdElement(doc, id);
 
                 if (idElem is null)
                 {

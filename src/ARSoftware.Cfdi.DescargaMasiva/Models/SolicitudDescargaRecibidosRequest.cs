@@ -35,7 +35,7 @@ namespace ARSoftware.Cfdi.DescargaMasiva.Models
         ///     Contiene el RFC del emisor del cual se quiere consultar los CFDIs.
         ///     Parámetro opcional.
         /// </summary>
-        public string RfcEmisor { get; init; }
+        public string RfcEmisor { get; init; } = string.Empty;
 
         /// <summary>
         ///     El RFC Solicitante corresponde al contribuyente que está realizando la solicitud de descarga.
