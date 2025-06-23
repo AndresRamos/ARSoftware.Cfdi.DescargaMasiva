@@ -45,8 +45,8 @@ namespace ARSoftware.Cfdi.DescargaMasiva.Services
 
             XmlElement peticionDescargaElement = xmlDocument.CreateElement(CfdiDescargaMasivaNamespaces.DesPrefix, "peticionDescarga",
                 CfdiDescargaMasivaNamespaces.DesNamespaceUrl);
-            peticionDescargaElement.SetAttribute("IdPaquete", descargaRequest.PackageId);
-            peticionDescargaElement.SetAttribute("RfcSolicitante", descargaRequest.RequestingRfc);
+            peticionDescargaElement.SetAttribute("IdPaquete", descargaRequest.IdPaquete);
+            peticionDescargaElement.SetAttribute("RfcSolicitante", descargaRequest.RfcSolicitante);
 
             XmlElement signatureElement = SignedXmlHelper.SignRequest(peticionDescargaElement, certificate);
             peticionDescargaElement.AppendChild(signatureElement);

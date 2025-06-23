@@ -26,12 +26,12 @@ namespace ARSoftware.Cfdi.DescargaMasiva.Models
     ///     • CFDI
     ///     Parámetro Obligatorio.
     /// </param>
-    public record SolicitudDescargaEmitidosRequest(
-        AccessToken AccessToken,
+    public sealed record SolicitudDescargaEmitidosRequest(
         DateTime FechaInicial,
         DateTime FechaFinal,
         string RfcEmisor,
-        TipoSolicitud TipoSolicitud)
+        TipoSolicitud TipoSolicitud,
+        AccessToken AccessToken)
     {
         /// <summary>
         ///     Contiene el/los RFC’s receptores de los cuales se quiere consultar los CFDIs.

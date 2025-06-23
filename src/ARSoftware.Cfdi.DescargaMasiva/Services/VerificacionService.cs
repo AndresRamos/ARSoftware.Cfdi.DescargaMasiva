@@ -46,8 +46,8 @@ namespace ARSoftware.Cfdi.DescargaMasiva.Services
 
             XmlElement solicitudElement = xmlDocument.CreateElement(CfdiDescargaMasivaNamespaces.DesPrefix, "solicitud",
                 CfdiDescargaMasivaNamespaces.DesNamespaceUrl);
-            solicitudElement.SetAttribute("IdSolicitud", verificacionRequest.RequestId);
-            solicitudElement.SetAttribute("RfcSolicitante", verificacionRequest.RequestingRfc);
+            solicitudElement.SetAttribute("IdSolicitud", verificacionRequest.IdSolicitud);
+            solicitudElement.SetAttribute("RfcSolicitante", verificacionRequest.RfcSolicitante);
 
             XmlElement signatureElement = SignedXmlHelper.SignRequest(solicitudElement, certificate);
             solicitudElement.AppendChild(signatureElement);
@@ -95,28 +95,28 @@ namespace ARSoftware.Cfdi.DescargaMasiva.Services
                     soapRequestResult.ResponseContent);
             }
 
-            string downloadRequestStatusNumber = verificaSolicitudDescargaResultElement.Attributes.GetNamedItem("EstadoSolicitud")?.Value ??
-                                                 string.Empty;
-            string downloadRequestStatusCode =
-                verificaSolicitudDescargaResultElement.Attributes.GetNamedItem("CodigoEstadoSolicitud")?.Value ?? string.Empty;
-            string numberOfCfdis = verificaSolicitudDescargaResultElement.Attributes.GetNamedItem("NumeroCFDIs")?.Value ?? string.Empty;
-            string requestStatusCode = verificaSolicitudDescargaResultElement.Attributes.GetNamedItem("CodEstatus")?.Value ?? string.Empty;
-            string requestStatusMessage = verificaSolicitudDescargaResultElement.Attributes.GetNamedItem("Mensaje")?.Value ?? string.Empty;
+            string estadoSolicitud = verificaSolicitudDescargaResultElement.Attributes.GetNamedItem("EstadoSolicitud")?.Value ??
+                                     string.Empty;
+            string codigoEstadoSolicitud = verificaSolicitudDescargaResultElement.Attributes.GetNamedItem("CodigoEstadoSolicitud")?.Value ??
+                                           string.Empty;
+            string numeroCFDIs = verificaSolicitudDescargaResultElement.Attributes.GetNamedItem("NumeroCFDIs")?.Value ?? string.Empty;
+            string codEstatus = verificaSolicitudDescargaResultElement.Attributes.GetNamedItem("CodEstatus")?.Value ?? string.Empty;
+            string mensaje = verificaSolicitudDescargaResultElement.Attributes.GetNamedItem("Mensaje")?.Value ?? string.Empty;
 
-            List<string> packageIdsList = new();
+            List<string> idsPaquetes = new();
 
-            if (downloadRequestStatusNumber == EstadoSolicitud.Terminada.Value.ToString())
+            if (estadoSolicitud == EstadoSolicitud.Terminada.Value.ToString())
             {
                 XmlNodeList idsPaquetesElements = xmlDocument.GetElementsByTagName("IdsPaquetes");
 
                 foreach (XmlNode idPaqueteElement in idsPaquetesElements)
                 {
-                    packageIdsList.Add(idPaqueteElement.InnerText);
+                    idsPaquetes.Add(idPaqueteElement.InnerText);
                 }
             }
 
-            return new VerificacionResult(packageIdsList, downloadRequestStatusNumber, downloadRequestStatusCode, numberOfCfdis,
-                requestStatusCode, requestStatusMessage, soapRequestResult.HttpStatusCode, soapRequestResult.ResponseContent);
+            return new VerificacionResult(idsPaquetes, estadoSolicitud, codigoEstadoSolicitud, numeroCFDIs, codEstatus, mensaje,
+                soapRequestResult.HttpStatusCode, soapRequestResult.ResponseContent);
         }
     }
 }

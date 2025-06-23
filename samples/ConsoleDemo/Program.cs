@@ -35,7 +35,7 @@ logger.LogInformation("Buscando el servicio de autenticacion en el contenedor de
 IAutenticacionService autenticacionService = host.Services.GetRequiredService<IAutenticacionService>();
 
 logger.LogInformation("Creando solicitud de autenticacion.");
-AutenticacionRequest autenticacionRequest = AutenticacionRequest.CreateInstance();
+AutenticacionRequest autenticacionRequest = AutenticacionRequest.CreateDefault();
 
 logger.LogInformation("Enviando solicitud de autenticacion.");
 AutenticacionResult autenticacionResult =
@@ -53,8 +53,8 @@ logger.LogInformation("La solicitud de autenticacion fue exitosa. AccessToken:{0
 // Solicitud
 
 // Paremetros para buscar CFDIs recibidos por rango de fecha
-DateTime fechaInicio = DateTime.Today;
-DateTime fechaFin = DateTime.Today;
+DateTime fechaInicial = DateTime.Today;
+DateTime fechaFinal = DateTime.Today;
 TipoSolicitud tipoSolicitud = TipoSolicitud.Cfdi;
 string rfcReceptor = "AAA010101AAA";
 string rfcSolicitante = "AAA010101AAA";
@@ -64,7 +64,7 @@ ISolicitudDescargaRecibidosService solicitudService = host.Services.GetRequiredS
 
 logger.LogInformation("Creando solicitud de solicitud de descarga.");
 SolicitudDescargaRecibidosRequest solicitudPorRangoFecha =
-    new(autenticacionResult.AccessToken, fechaInicio, fechaFin, rfcReceptor, tipoSolicitud);
+    new(fechaInicial, fechaFinal, rfcReceptor, tipoSolicitud, autenticacionResult.AccessToken);
 
 logger.LogInformation("Enviando solicitud de solicitud de descarga.");
 SolicitudDescargaRecibidosResult solicitudResult =
@@ -90,18 +90,18 @@ logger.LogInformation("Enviando solicitud de verificacion.");
 VerificacionResult verificacionResult = await verificaSolicitudService.SendSoapRequestAsync(verificacionRequest,
     certificadoSat, cancellationToken);
 
-if (verificacionResult.DownloadRequestStatusNumber != EstadoSolicitud.Terminada.Value.ToString())
+if (verificacionResult.EstadoSolicitud != EstadoSolicitud.Terminada.Value.ToString())
 {
     logger.LogError(
         "La solicitud de verificacion no fue exitosa. DownloadRequestStatusNumber:{0} RequestStatusCode:{1} RequestStatusMessage:{2}",
-        verificacionResult.DownloadRequestStatusNumber, verificacionResult.RequestStatusCode, verificacionResult.RequestStatusMessage);
+        verificacionResult.EstadoSolicitud, verificacionResult.CodEstatus, verificacionResult.Mensaje);
 
-    if (verificacionResult.DownloadRequestStatusNumber == EstadoSolicitud.Aceptada.Value.ToString())
+    if (verificacionResult.EstadoSolicitud == EstadoSolicitud.Aceptada.Value.ToString())
     {
         logger.LogInformation(
             "Es estado de la solicitud es Aceptada. Mandar otra solicitud de verificaion mas tarde para que el servicio web pueda procesar la solicitud.");
     }
-    else if (verificacionResult.DownloadRequestStatusNumber == EstadoSolicitud.EnProceso.Value.ToString())
+    else if (verificacionResult.EstadoSolicitud == EstadoSolicitud.EnProceso.Value.ToString())
     {
         logger.LogInformation(
             "Es estado de la solicitud es En Proceso. Mandar otra solicitud de verificaion mas tarde para que el servicio web pueda procesar la solicitud.");
@@ -111,19 +111,19 @@ if (verificacionResult.DownloadRequestStatusNumber != EstadoSolicitud.Terminada.
 }
 
 logger.LogInformation("La solicitud de verificacion fue exitosa.");
-foreach (string idsPaquete in verificacionResult.PackageIds)
+foreach (string idsPaquete in verificacionResult.IdsPaquetes)
 {
     logger.LogInformation("PackageId:{0}", idsPaquete);
 }
 
 // Descarga
-logger.LogInformation("Buscando el servicio de verificacion en el contenedor de servicios (Dependency Injection).");
+logger.LogInformation("Buscando el servicio de descarga en el contenedor de servicios (Dependency Injection).");
 IDescargaService descargarSolicitudService = host.Services.GetRequiredService<IDescargaService>();
 
-foreach (string idsPaquete in verificacionResult.PackageIds)
+foreach (string idPaquete in verificacionResult.IdsPaquetes)
 {
     logger.LogInformation("Creando solicitud de descarga.");
-    DescargaRequest descargaRequest = new(idsPaquete, rfcSolicitante, autenticacionResult.AccessToken);
+    DescargaRequest descargaRequest = new(idPaquete, rfcSolicitante, autenticacionResult.AccessToken);
 
     logger.LogInformation("Enviando solicitud de descarga.");
     DescargaResult descargaResult = await descargarSolicitudService.SendSoapRequestAsync(descargaRequest,
@@ -131,8 +131,8 @@ foreach (string idsPaquete in verificacionResult.PackageIds)
 
     string rutaDescarga = @"C:\AR Software\CFDI Descarga Masiva\CFDIs";
 
-    string fileName = Path.Combine(rutaDescarga, $"{idsPaquete}.zip");
-    byte[] paqueteContenido = Convert.FromBase64String(descargaResult.Package);
+    string fileName = Path.Combine(rutaDescarga, $"{idPaquete}.zip");
+    byte[] paqueteContenido = Convert.FromBase64String(descargaResult.Paquete);
 
     logger.LogInformation("Guardando paquete descargado en un archivo .zip en la ruta de descarga.");
     using FileStream fileStream = File.Create(fileName, paqueteContenido.Length);
