@@ -5,11 +5,11 @@
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>disable</ImplicitUsings>
 		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-		<Version>3.0.0</Version>
+		<Version>4.0.0-beta1</Version>
 		<Authors>AR Software</Authors>
 		<Product>ARSoftware Cfdi Descarga Masiva</Product>
-		<Description>Implementacion de clases y servicios para descargar los CFDI de forma masiva utilizando el web service del SAT.</Description>
-		<Copyright>Copyright © AR Software 2023</Copyright>
+		<Description>Implementacion de clases y servicios para descargar los CFDI de forma masiva utilizando el web service del SAT v1.5.</Description>
+		<Copyright>Copyright © AR Software 2025</Copyright>
 		<PackageProjectUrl>https://github.com/AndresRamos/ARSoftware.Cfdi.DescargaMasiva</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/AndresRamos/ARSoftware.Cfdi.DescargaMasiva</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>
