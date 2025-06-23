@@ -10,7 +10,7 @@ using ARSoftware.Cfdi.DescargaMasiva.Models;
 
 namespace ARSoftware.Cfdi.DescargaMasiva.Services
 {
-    public class SolicitudDescargaRecibidosService : ISolicitudDescargaRecibidosService
+    public sealed class SolicitudDescargaRecibidosService : ISolicitudDescargaRecibidosService
     {
         private readonly IHttpSoapClient _httpSoapClient;
 
@@ -135,19 +135,13 @@ namespace ARSoftware.Cfdi.DescargaMasiva.Services
                     soapRequestResult.ResponseContent);
             }
 
-            string requestIdSolicitud = element.Attributes.GetNamedItem("IdSolicitud")?.Value ?? string.Empty;
-            string requestRfcSolicitante = element.Attributes.GetNamedItem("RfcSolicitante")?.Value ?? string.Empty;
-            string requestCodEstatus = element.Attributes.GetNamedItem("CodEstatus")?.Value ?? string.Empty;
-            string requestMensaje = element.Attributes.GetNamedItem("Mensaje")?.Value ?? string.Empty;
+            string idSolicitud = element.Attributes.GetNamedItem("IdSolicitud")?.Value ?? string.Empty;
+            string rfcSolicitante = element.Attributes.GetNamedItem("RfcSolicitante")?.Value ?? string.Empty;
+            string codEstatus = element.Attributes.GetNamedItem("CodEstatus")?.Value ?? string.Empty;
+            string mensaje = element.Attributes.GetNamedItem("Mensaje")?.Value ?? string.Empty;
 
-            return new SolicitudDescargaRecibidosResult(
-                requestIdSolicitud,
-                requestRfcSolicitante,
-                requestCodEstatus,
-                requestMensaje,
-                soapRequestResult.HttpStatusCode,
-                soapRequestResult.ResponseContent
-            );
+            return new SolicitudDescargaRecibidosResult(idSolicitud, rfcSolicitante, codEstatus, mensaje, soapRequestResult.HttpStatusCode,
+                soapRequestResult.ResponseContent);
         }
     }
 }

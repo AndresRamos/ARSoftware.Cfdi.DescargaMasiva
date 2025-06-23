@@ -7,7 +7,7 @@ namespace ARSoftware.Cfdi.DescargaMasiva.Models
     ///     Token de autorizacion para autenticar peticiones con el web service de descarga masiva de CFDIs del SAT.
     /// </summary>
     /// <param name="Value">Valor del Token tomado del resultado de la peticion de autenticacion.</param>
-    public record AccessToken(string Value)
+    public sealed record AccessToken(string Value)
     {
         public bool IsValid => !string.IsNullOrWhiteSpace(Value);
 

@@ -5,7 +5,7 @@
     /// </summary>
     /// <param name="AccessToken">Token de autorizacion.</param>
     /// <param name="Folio">Folio Fiscal con formato: XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX. Parámetro obligatorio.</param>
-    public record SolicitudDescargaFolioRequest(AccessToken AccessToken, string Folio)
+    public sealed record SolicitudDescargaFolioRequest(string Folio, AccessToken AccessToken)
     {
         /// <summary>
         ///     Contiene el RFC del que está realizando la solicitud de descarga.

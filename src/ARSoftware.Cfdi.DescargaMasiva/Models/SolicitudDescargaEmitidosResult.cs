@@ -14,7 +14,7 @@ namespace ARSoftware.Cfdi.DescargaMasiva.Models
     /// <param name="Mensaje">Pequeña descripción del código estatus.</param>
     /// <param name="HttpStatusCode">Codigo de estatus de la respuesta HTTP.</param>
     /// <param name="ResponseContent">Contenido del mensage de la respuesta HTTP.</param>
-    public record SolicitudDescargaEmitidosResult(
+    public sealed record SolicitudDescargaEmitidosResult(
         string IdSolicitud,
         string RfcSolicitante,
         string CodEstatus,
