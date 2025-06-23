@@ -7,25 +7,32 @@ namespace ARSoftware.Cfdi.DescargaMasiva.Models
     /// <summary>
     ///     Peticion de solicitud de descarga de CFDIs emitidos.
     /// </summary>
-    public record SolicitudDescargaEmitidosRequest
+    /// <param name="AccessToken">Token de autorizacion.</param>
+    /// <param name="FechaInicial">
+    ///     Solo se buscarán CFDI, cuya fecha de emisión sea igual o mayor a la fecha inicial indicada en este parámetro.
+    ///     Parámetro obligatorio.
+    /// </param>
+    /// <param name="FechaFinal">
+    ///     Solo se buscarán CFDI, cuya fecha de emisión sea igual o menor a la fecha final indicada en este parámetro.
+    ///     Parámetro obligatorio.
+    /// </param>
+    /// <param name="RfcEmisor">
+    ///     Contiene el RFC del emisor del cual se quiere consultar los CFDIs.
+    ///     Parámetro obligatorio.
+    /// </param>
+    /// <param name="TipoSolicitud">
+    ///     Define el tipo de descarga: Metadata o CFDI. Parámetro Obligatorio.
+    ///     • Metadata
+    ///     • CFDI
+    ///     Parámetro Obligatorio.
+    /// </param>
+    public record SolicitudDescargaEmitidosRequest(
+        AccessToken AccessToken,
+        DateTime FechaInicial,
+        DateTime FechaFinal,
+        string RfcEmisor,
+        TipoSolicitud TipoSolicitud)
     {
-        /// <summary>
-        ///     Token de autorizacion.
-        /// </summary>
-        public required AccessToken AccessToken { get; init; }
-
-        /// <summary>
-        ///     Solo se buscarán CFDI, cuya fecha de emisión sea igual o mayor a la fecha inicial indicada en este parámetro.
-        ///     Parámetro obligatorio.
-        /// </summary>
-        public required DateTime FechaInicial { get; init; }
-
-        /// <summary>
-        ///     Solo se buscarán CFDI, cuya fecha de emisión sea igual o menor a la fecha final indicada en este parámetro.
-        ///     Parámetro obligatorio.
-        /// </summary>
-        public required DateTime FechaFinal { get; init; }
-
         /// <summary>
         ///     Contiene el/los RFC’s receptores de los cuales se quiere consultar los CFDIs.
         ///     Importante: El campo RfcReceptor, únicamente permite la captura de 5 registros como máximo.
@@ -33,25 +40,11 @@ namespace ARSoftware.Cfdi.DescargaMasiva.Models
         public List<string> RfcReceptores { get; init; } = new();
 
         /// <summary>
-        ///     Contiene el RFC del emisor del cual se quiere consultar los CFDIs.
-        ///     Parámetro obligatorio.
-        /// </summary>
-        public required string RfcEmisor { get; init; }
-
-        /// <summary>
         ///     El RFC Solicitante corresponde al contribuyente que está realizando la solicitud de descarga.
         ///     Este parámetro es opcional, pero en caso de proporcionarse debe coincidir con el RFC Emisor.
         ///     Parámetro Opcional.
         /// </summary>
         public string RfcSolicitante { get; init; } = string.Empty;
-
-        /// <summary>
-        ///     Define el tipo de descarga:
-        ///     • Metadata
-        ///     • CFDI
-        ///     Parámetro Obligatorio.
-        /// </summary>
-        public required TipoSolicitud TipoSolicitud { get; init; }
 
         /// <summary>
         ///     Define el tipo de comprobante:

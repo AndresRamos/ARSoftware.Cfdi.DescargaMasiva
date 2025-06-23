@@ -140,15 +140,14 @@ namespace ARSoftware.Cfdi.DescargaMasiva.Services
             string requestCodEstatus = element.Attributes.GetNamedItem("CodEstatus")?.Value ?? string.Empty;
             string requestMensaje = element.Attributes.GetNamedItem("Mensaje")?.Value ?? string.Empty;
 
-            return new SolicitudDescargaRecibidosResult
-            {
-                RfcSolicitante = requestRfcSolicitante,
-                IdSolicitud = requestIdSolicitud,
-                CodEstatus = requestCodEstatus,
-                Mensaje = requestMensaje,
-                HttpStatusCode = soapRequestResult.HttpStatusCode,
-                ResponseContent = soapRequestResult.ResponseContent
-            };
+            return new SolicitudDescargaRecibidosResult(
+                requestIdSolicitud,
+                requestRfcSolicitante,
+                requestCodEstatus,
+                requestMensaje,
+                soapRequestResult.HttpStatusCode,
+                soapRequestResult.ResponseContent
+            );
         }
     }
 }

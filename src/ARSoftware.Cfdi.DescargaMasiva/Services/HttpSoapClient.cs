@@ -20,10 +20,10 @@ namespace ARSoftware.Cfdi.DescargaMasiva.Services
         }
 
         public async Task<SoapRequestResult> SendRequestAsync(string url,
-                                                              string soapAction,
-                                                              AccessToken accessToken,
-                                                              string requestContent,
-                                                              CancellationToken cancellationToken)
+            string soapAction,
+            AccessToken accessToken,
+            string requestContent,
+            CancellationToken cancellationToken)
         {
             if (url is null)
                 throw new ArgumentNullException(nameof(url));
@@ -39,7 +39,7 @@ namespace ARSoftware.Cfdi.DescargaMasiva.Services
 
             _httpClient.DefaultRequestHeaders.Clear();
 
-            var request = new HttpRequestMessage(HttpMethod.Post, new Uri(url));
+            HttpRequestMessage request = new(HttpMethod.Post, new Uri(url));
 
             request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue(MediaTypeNames.Text.Xml));
 
@@ -52,7 +52,7 @@ namespace ARSoftware.Cfdi.DescargaMasiva.Services
 
             HttpResponseMessage response = await _httpClient.SendAsync(request, cancellationToken);
 
-            return SoapRequestResult.CreateInstance(response.StatusCode, await response.Content.ReadAsStringAsync());
+            return new SoapRequestResult(response.StatusCode, await response.Content.ReadAsStringAsync(cancellationToken));
         }
     }
 }

@@ -63,14 +63,8 @@ logger.LogInformation("Buscando el servicio de solicitud de descarga en el conte
 ISolicitudDescargaRecibidosService solicitudService = host.Services.GetRequiredService<ISolicitudDescargaRecibidosService>();
 
 logger.LogInformation("Creando solicitud de solicitud de descarga.");
-SolicitudDescargaRecibidosRequest solicitudPorRangoFecha = new()
-{
-    AccessToken = autenticacionResult.AccessToken,
-    FechaInicial = fechaInicio,
-    FechaFinal = fechaFin,
-    RfcReceptor = rfcReceptor,
-    TipoSolicitud = tipoSolicitud
-};
+SolicitudDescargaRecibidosRequest solicitudPorRangoFecha =
+    new(autenticacionResult.AccessToken, fechaInicio, fechaFin, rfcReceptor, tipoSolicitud);
 
 logger.LogInformation("Enviando solicitud de solicitud de descarga.");
 SolicitudDescargaRecibidosResult solicitudResult =
@@ -90,8 +84,7 @@ logger.LogInformation("Buscando el servicio de verificacion en el contenedor de 
 IVerificacionService verificaSolicitudService = host.Services.GetRequiredService<IVerificacionService>();
 
 logger.LogInformation("Creando solicitud de verificacion.");
-VerificacionRequest verificacionRequest =
-    VerificacionRequest.CreateInstance(solicitudResult.IdSolicitud, rfcSolicitante, autenticacionResult.AccessToken);
+VerificacionRequest verificacionRequest = new(solicitudResult.IdSolicitud, rfcSolicitante, autenticacionResult.AccessToken);
 
 logger.LogInformation("Enviando solicitud de verificacion.");
 VerificacionResult verificacionResult = await verificaSolicitudService.SendSoapRequestAsync(verificacionRequest,
@@ -130,7 +123,7 @@ IDescargaService descargarSolicitudService = host.Services.GetRequiredService<ID
 foreach (string idsPaquete in verificacionResult.PackageIds)
 {
     logger.LogInformation("Creando solicitud de descarga.");
-    DescargaRequest descargaRequest = DescargaRequest.CreateInstace(idsPaquete, rfcSolicitante, autenticacionResult.AccessToken);
+    DescargaRequest descargaRequest = new(idsPaquete, rfcSolicitante, autenticacionResult.AccessToken);
 
     logger.LogInformation("Enviando solicitud de descarga.");
     DescargaResult descargaResult = await descargarSolicitudService.SendSoapRequestAsync(descargaRequest,

@@ -96,7 +96,7 @@ namespace ARSoftware.Cfdi.DescargaMasiva.Services
             string requestStatusCode = element.Attributes.GetNamedItem("CodEstatus")?.Value ?? string.Empty;
             string requestStatusMessage = element.Attributes.GetNamedItem("Mensaje")?.Value ?? string.Empty;
 
-            return DescargaResult.CreateInstance(package, requestStatusCode, requestStatusMessage, soapRequestResult.HttpStatusCode,
+            return new DescargaResult(package, requestStatusCode, requestStatusMessage, soapRequestResult.HttpStatusCode,
                 soapRequestResult.ResponseContent);
         }
     }

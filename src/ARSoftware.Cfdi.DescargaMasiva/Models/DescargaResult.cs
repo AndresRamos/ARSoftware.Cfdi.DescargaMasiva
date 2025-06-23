@@ -1,58 +1,21 @@
-﻿using System;
-using System.Net;
+﻿using System.Net;
 
 namespace ARSoftware.Cfdi.DescargaMasiva.Models
 {
     /// <summary>
     ///     Resultado de la peticion de descarga.
     /// </summary>
-    public sealed class DescargaResult
+    /// <param name="Package">Paquete - Representa el paquete que se desea descargar.</param>
+    /// <param name="RequestStatusCode">CodEstatus - Código de estatus de la solicitud.</param>
+    /// <param name="RequestStatusMessage">Mensaje - Pequeña descripción del código estatus.</param>
+    /// <param name="HttpStatusCode">Codigo de estatus de la respuesta HTTP.</param>
+    /// <param name="ResponseContent">Contenido del mensage de la respuesta HTTP.</param>
+    public record DescargaResult(
+        string Package,
+        string RequestStatusCode,
+        string RequestStatusMessage,
+        HttpStatusCode HttpStatusCode,
+        string ResponseContent)
     {
-        private DescargaResult(string package,
-                               string requestStatusCode,
-                               string requestStatusMessage,
-                               HttpStatusCode httpStatusCode,
-                               string responseContent)
-        {
-            RequestStatusCode = requestStatusCode ?? throw new ArgumentNullException(nameof(requestStatusCode));
-            RequestStatusMessage = requestStatusMessage ?? throw new ArgumentNullException(nameof(requestStatusMessage));
-            Package = package ?? throw new ArgumentNullException(nameof(package));
-            HttpStatusCode = httpStatusCode;
-            ResponseContent = responseContent ?? throw new ArgumentNullException(nameof(responseContent));
-        }
-
-        /// <summary>
-        ///     Paquete - Representa el paquete que se desea descargar.
-        /// </summary>
-        public string Package { get; }
-
-        /// <summary>
-        ///     CodEstatus - Código de estatus de la solicitud.
-        /// </summary>
-        public string RequestStatusCode { get; }
-
-        /// <summary>
-        ///     Mensaje - Pequeña descripción del código estatus.
-        /// </summary>
-        public string RequestStatusMessage { get; }
-
-        /// <summary>
-        ///     Codigo de estatus de la respuesta HTTP.
-        /// </summary>
-        public HttpStatusCode HttpStatusCode { get; }
-
-        /// <summary>
-        ///     Contenido del mensage de la respuesta HTTP.
-        /// </summary>
-        public string ResponseContent { get; }
-
-        public static DescargaResult CreateInstance(string package,
-                                                    string requestStatusCode,
-                                                    string requestStatusMessage,
-                                                    HttpStatusCode httpStatusCode,
-                                                    string responseContent)
-        {
-            return new DescargaResult(package, requestStatusCode, requestStatusMessage, httpStatusCode, responseContent);
-        }
     }
 }
