@@ -87,14 +87,5 @@ namespace ARSoftware.Cfdi.DescargaMasiva.Models
         public bool HasRfcACuentaTerceros => !string.IsNullOrWhiteSpace(RfcACuentaTerceros);
 
         public bool HasRfcSolicitante => !string.IsNullOrWhiteSpace(RfcSolicitante);
-
-        public SolicitudDescargaEmitidosRequest CreateInstance(AccessToken accessToken,
-            DateTime fechaInicial,
-            DateTime fechaFinal,
-            string rfcEmisor,
-            TipoSolicitud tipoSolicitud)
-        {
-            return new SolicitudDescargaEmitidosRequest(accessToken, fechaInicial, fechaFinal, rfcEmisor, tipoSolicitud);
-        }
     }
 }

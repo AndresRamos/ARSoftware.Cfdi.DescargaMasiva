@@ -17,15 +17,6 @@ namespace ARSoftware.Cfdi.DescargaMasiva.Models
         HttpStatusCode HttpStatusCode,
         string ResponseContent)
     {
-        public static AutenticacionResult CreateInstance(AccessToken accessToken,
-            string faultCode,
-            string faultString,
-            HttpStatusCode httpStatusCode,
-            string responseContent)
-        {
-            return new AutenticacionResult(accessToken, faultCode, faultString, httpStatusCode, responseContent);
-        }
-
         public static AutenticacionResult CreateSuccess(AccessToken accessToken, HttpStatusCode httpStatusCode, string responseContent)
         {
             return new AutenticacionResult(accessToken, string.Empty, string.Empty, httpStatusCode, responseContent);

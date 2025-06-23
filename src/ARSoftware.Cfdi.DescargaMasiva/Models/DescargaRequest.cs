@@ -9,11 +9,5 @@
     ///     descarga masiva.
     /// </param>
     /// <param name="AccessToken">Token de autorizacion.</param>
-    public record DescargaRequest(string PackageId, string RequestingRfc, AccessToken AccessToken)
-    {
-        public static DescargaRequest CreateInstance(string packageId, string requestingRfc, AccessToken accessToken)
-        {
-            return new DescargaRequest(packageId, requestingRfc, accessToken);
-        }
-    }
+    public record DescargaRequest(string PackageId, string RequestingRfc, AccessToken AccessToken);
 }

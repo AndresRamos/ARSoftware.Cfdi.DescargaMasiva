@@ -21,11 +21,6 @@ namespace ARSoftware.Cfdi.DescargaMasiva.Models
         /// </summary>
         public string HttpAuthorizationHeader => SoapRequestHelper.CreateHttpAuthorizationHeaderFromToken(Value);
 
-        public static AccessToken CreateInstance(string token)
-        {
-            return new AccessToken(token);
-        }
-
         public static AccessToken CreateEmpty()
         {
             return new AccessToken(string.Empty);

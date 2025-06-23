@@ -17,13 +17,5 @@ namespace ARSoftware.Cfdi.DescargaMasiva.Models
         HttpStatusCode HttpStatusCode,
         string ResponseContent)
     {
-        public static DescargaResult CreateInstance(string package,
-            string requestStatusCode,
-            string requestStatusMessage,
-            HttpStatusCode httpStatusCode,
-            string responseContent)
-        {
-            return new DescargaResult(package, requestStatusCode, requestStatusMessage, httpStatusCode, responseContent);
-        }
     }
 }
