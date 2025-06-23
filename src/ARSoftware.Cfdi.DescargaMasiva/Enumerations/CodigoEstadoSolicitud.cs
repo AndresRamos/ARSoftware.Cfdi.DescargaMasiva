@@ -39,12 +39,6 @@ namespace ARSoftware.Cfdi.DescargaMasiva.Enumerations
             "En caso de que exista una solicitud vigente con los mismos parámetros (Fecha Inicial, Fecha Final, RfcEmisor, RfcReceptor, TipoSolicitud), no se permitirá generar una nueva solicitud.");
 
         /// <summary>
-        ///     5011 = Límite de descargas por folio por día.
-        /// </summary>
-        public static readonly CodigoEstadoSolicitud LimiteDescargasPorFolioPorDia = new("5011", 5011, "Límite de descargas por folio por día",
-            "Se ha alcanzado o sobrepasado el límite de descargas diarias por folio.");
-
-        /// <summary>
         ///     404 = Error no Controlado.
         /// </summary>
         public static readonly CodigoEstadoSolicitud ErrorNoControlado = new("404", 404, "Error no Controlado",
