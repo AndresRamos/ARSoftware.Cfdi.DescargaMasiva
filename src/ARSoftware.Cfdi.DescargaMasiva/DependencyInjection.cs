@@ -4,7 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace ARSoftware.Cfdi.DescargaMasiva
 {
-    public static class ConfigureServices
+    public static class DependencyInjection
     {
         public static IServiceCollection AddCfdiDescargaMasivaServices(this IServiceCollection serviceCollection)
         {
