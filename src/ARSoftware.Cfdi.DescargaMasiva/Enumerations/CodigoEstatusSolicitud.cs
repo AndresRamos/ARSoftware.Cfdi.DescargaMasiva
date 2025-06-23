@@ -101,6 +101,12 @@ namespace ARSoftware.Cfdi.DescargaMasiva.Enumerations
             "Un paquete solo puede descargarse un total de 2 veces, una vez agotadas, ya no se podrá volver a descargar");
 
         /// <summary>
+        ///     5011 = Límite de descargas por folio por día.
+        /// </summary>
+        public static readonly CodigoEstatusSolicitud _5011 = new("5011", 5011, "Límite de descargas por folio por día",
+            "Se ha alcanzado o sobrepasado el límite de descargas diarias por folio.");
+
+        /// <summary>
         ///     5012 = Máximo de descargas permitidas
         /// </summary>
         public static readonly CodigoEstatusSolicitud _5012 = new("5012", 5012,

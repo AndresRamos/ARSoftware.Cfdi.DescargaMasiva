@@ -9,40 +9,43 @@ namespace ARSoftware.Cfdi.DescargaMasiva.Enumerations
     public sealed class CodigoEstadoSolicitud : SmartEnum<CodigoEstadoSolicitud>
     {
         /// <summary>
-        ///     5000 = Solicitud recibida con éxito
+        ///     5000 = Solicitud recibida con éxito.
         /// </summary>
         public static readonly CodigoEstadoSolicitud _5000 = new("5000", 5000, "Solicitud recibida con éxito",
             "Indica que la solicitud de descarga que se está verificando fue aceptada.");
 
         /// <summary>
-        ///     5002 = Se agotó las solicitudes de por vida
+        ///     5002 = Se agotó las solicitudes de por vida.
         /// </summary>
         public static readonly CodigoEstadoSolicitud _5002 = new("5002", 5002, "Se agotó las solicitudes de por vida",
             "Para el caso de descarga de tipo CFDI, se tiene unlímite máximo para solicitudes con los mismos parámetros(Fecha Inicial, Fecha Final, RfcEmisor, RfcReceptor).");
 
         /// <summary>
-        ///     5003 = Tope máximo
+        ///     5003 = Tope máximo.
         /// </summary>
         public static readonly CodigoEstadoSolicitud _5003 = new("5003", 5003, "Tope máximo",
             "Indica que en base a los parámetros de consulta se está superando el tope máximo de CFDI o Metadata, por solicitud de descarga masiva.");
 
         /// <summary>
-        ///     5004 = No se encontró la información
+        ///     5004 = No se encontró la información.
         /// </summary>
         public static readonly CodigoEstadoSolicitud _5004 = new("5004", 5004, "No se encontró la información",
             "Indica que la solicitud de descarga que se está verificando no generó paquetes por falta de información.");
 
         /// <summary>
-        ///     5005 = Solicitud duplicada
+        ///     5005 = Solicitud duplicada.
         /// </summary>
         public static readonly CodigoEstadoSolicitud _5005 = new("5005", 5005, "Solicitud duplicada",
             "En caso de que exista una solicitud vigente con los mismos parámetros (Fecha Inicial, Fecha Final, RfcEmisor, RfcReceptor, TipoSolicitud), no se permitirá generar una nueva solicitud.");
 
+        /// <summary>
+        ///     5011 = Límite de descargas por folio por día.
+        /// </summary>
         public static readonly CodigoEstadoSolicitud _5011 = new("5011", 5011, "Límite de descargas por folio por día",
             "Se ha alcanzado o sobrepasado el límite de descargas diarias por folio.");
 
         /// <summary>
-        ///     404 = Error no Controlado
+        ///     404 = Error no Controlado.
         /// </summary>
         public static readonly CodigoEstadoSolicitud _404 = new("404", 404, "Error no Controlado",
             "Error genérico, en caso de presentarse realizar nuevamente la petición y si persiste el error levantar un RMA.");
